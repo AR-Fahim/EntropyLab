@@ -1,0 +1,13 @@
+target/
+*.class
+.idea/
+*.iml
+.vscode/
+scratch/
+DOC_CONTEXT.md
+Doc_writing_milestones.md
+Doc_writing_milestone.md
+implementation plan and history.md
+MasterContextBrief.md
+.env
+PersistentProjectContext.md
