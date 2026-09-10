@@ -1,0 +1,329 @@
+/* EntropyLab — Light Theme */
+.root {
+    -fx-base: #FFFFFF;
+    -fx-background-color: #FFFFFF;
+    -fx-font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    -fx-font-size: 13px;
+}
+
+/* Labels & Typography */
+.label {
+    -fx-text-fill: #212121;
+}
+
+.label.secondary {
+    -fx-text-fill: #555555;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #FE0134;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #D9012C;
+}
+
+.button:pressed {
+    -fx-background-color: #B80125;
+}
+
+/* Tabs */
+.tab-pane {
+    -fx-background-color: #FFFFFF;
+    -fx-tab-min-height: 32px;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #F5F5F5;
+}
+
+.tab {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 6px 14px;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #555555;
+    -fx-font-weight: normal;
+}
+
+.tab:selected {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: transparent transparent #FE0134 transparent;
+    -fx-border-width: 0 0 3px 0;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: #FE0134;
+    -fx-font-weight: bold;
+}
+
+/* Tables */
+.table-view {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 1px;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #F8F8F8;
+    -fx-border-color: #E0E0E0;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-font-weight: bold;
+    -fx-text-fill: #212121;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: #212121;
+    -fx-border-color: transparent transparent #F0F0F0 transparent;
+}
+
+.table-row-cell {
+    -fx-background-color: #FFFFFF;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FAFAFA;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #FE0134;
+    -fx-text-fill: #FFFFFF;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: #FFFFFF;
+}
+
+/* Text Fields */
+.text-field {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #212121;
+    -fx-prompt-text-fill: #888888;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px 10px;
+}
+
+.text-field:focused {
+    -fx-border-color: #FE0134;
+}
+
+/* Dialogs */
+.dialog-pane {
+    -fx-background-color: #FFFFFF;
+}
+
+.dialog-pane > .content.label {
+    -fx-text-fill: #212121;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #F8F8F8;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #212121;
+    -fx-font-weight: bold;
+}
+
+/* Check Boxes */
+.check-box {
+    -fx-text-fill: #212121;
+}
+
+.check-box .box {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #FE0134;
+    -fx-border-color: #FE0134;
+}
+
+.check-box:selected .mark {
+    -fx-background-color: #FFFFFF;
+}
+
+/* Cards & Content Panes */
+.card-pane {
+    -fx-background-color: #F8F9FA;
+    -fx-border-color: #E2E8F0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 16px;
+}
+
+.card-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1A202C;
+}
+
+.badge {
+    -fx-background-color: rgba(254, 1, 52, 0.12);
+    -fx-text-fill: #D9012C;
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-background-radius: 4px;
+    -fx-padding: 2px 8px;
+}
+
+.hyperlink {
+    -fx-text-fill: #0066CC;
+    -fx-underline: false;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.hyperlink:hover {
+    -fx-text-fill: #004499;
+    -fx-underline: true;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Charts */
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.chart-vertical-grid-lines,
+.chart-horizontal-grid-lines {
+    -fx-stroke: #E2E8F0;
+}
+
+.axis {
+    -fx-tick-label-fill: #4A5568;
+}
+
+.axis-label {
+    -fx-text-fill: #1A202C;
+    -fx-font-weight: bold;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #4A5568;
+}
+
+.chart-bar {
+    -fx-bar-fill: #FE0134;
+    -fx-background-radius: 4px 4px 0 0;
+}
+
+/* Custom Window Frame & Title Bar */
+.window-root {
+    -fx-border-color: #D1D5DB;
+    -fx-border-width: 1px;
+}
+
+.custom-title-bar {
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-min-height: 36px;
+    -fx-pref-height: 36px;
+    -fx-max-height: 36px;
+}
+
+.title-bar-title {
+    -fx-text-fill: #1F2937;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.title-bar-theme-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-padding: 0;
+    -fx-min-width: 32px;
+    -fx-pref-width: 32px;
+    -fx-max-width: 32px;
+    -fx-min-height: 28px;
+    -fx-pref-height: 28px;
+    -fx-max-height: 28px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER;
+}
+
+.title-bar-theme-btn:hover {
+    -fx-background-color: #E5E7EB;
+}
+
+.title-bar-theme-icon {
+    -fx-fill: #4B5563;
+}
+
+.title-bar-btn {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-min-width: 46px;
+    -fx-pref-width: 46px;
+    -fx-max-width: 46px;
+    -fx-min-height: 36px;
+    -fx-pref-height: 36px;
+    -fx-max-height: 36px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER;
+}
+
+.title-bar-btn:hover {
+    -fx-background-color: #E5E7EB;
+}
+
+.title-bar-btn .title-bar-glyph {
+    -fx-fill: #4B5563;
+}
+
+.title-bar-btn:hover .title-bar-glyph {
+    -fx-fill: #111827;
+}
+
+.title-bar-close-btn:hover {
+    -fx-background-color: #E81123;
+}
+
+.title-bar-close-btn:hover .title-bar-glyph {
+    -fx-fill: #FFFFFF;
+}
+
+.title-bar-close-btn:pressed {
+    -fx-background-color: #C4101F;
+}
+
