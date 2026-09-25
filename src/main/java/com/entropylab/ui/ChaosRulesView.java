@@ -36,14 +36,16 @@ public class ChaosRulesView extends VBox {
     private final Button editRuleButton;
 
     public ChaosRulesView() {
-        setPadding(new Insets(16));
-        setSpacing(12);
+        setPadding(new Insets(14, 16, 14, 16));
+        setSpacing(10);
 
         // Toolbar with Edit Chaos Rule Button
         editRuleButton = new Button("Edit Chaos Rule");
         editRuleButton.setId("editChaosRuleButton");
+        editRuleButton.getStyleClass().addAll("btn", "btn-secondary");
 
         HBox toolbar = new HBox(editRuleButton);
+        toolbar.getStyleClass().add("view-toolbar");
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
         List<RouteMapping> routes = ConfigManager.getInstance().getConfig() != null

@@ -41,8 +41,8 @@ public class RouteMappingView extends VBox {
     private final Button deleteRouteButton;
 
     public RouteMappingView() {
-        setPadding(new Insets(16));
-        setSpacing(12);
+        setPadding(new Insets(14, 16, 14, 16));
+        setSpacing(10);
 
         List<RouteMapping> existingRoutes = ConfigManager.getInstance().getConfig() != null
                 && ConfigManager.getInstance().getConfig().getRouteMappings() != null
@@ -57,10 +57,12 @@ public class RouteMappingView extends VBox {
         // Toolbar with Add, Edit, Delete Buttons
         addRouteButton = new Button("Add Route");
         addRouteButton.setId("addRouteButton");
+        addRouteButton.getStyleClass().addAll("btn", "btn-primary");
         addRouteButton.setOnAction(e -> showAddRouteDialog());
 
         editRouteButton = new Button("Edit Route");
         editRouteButton.setId("editRouteButton");
+        editRouteButton.getStyleClass().addAll("btn", "btn-secondary");
         editRouteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
         editRouteButton.setOnAction(e -> {
             RouteMapping selected = tableView.getSelectionModel().getSelectedItem();
@@ -71,6 +73,7 @@ public class RouteMappingView extends VBox {
 
         deleteRouteButton = new Button("Delete Route");
         deleteRouteButton.setId("deleteRouteButton");
+        deleteRouteButton.getStyleClass().addAll("btn", "btn-danger");
         deleteRouteButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
         deleteRouteButton.setOnAction(e -> {
             RouteMapping selected = tableView.getSelectionModel().getSelectedItem();
@@ -80,6 +83,7 @@ public class RouteMappingView extends VBox {
         });
 
         HBox toolbar = new HBox(8, addRouteButton, editRouteButton, deleteRouteButton);
+        toolbar.getStyleClass().add("view-toolbar");
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
         TableColumn<RouteMapping, String> localPathCol = new TableColumn<>("Local Path");

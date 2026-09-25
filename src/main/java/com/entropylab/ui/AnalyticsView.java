@@ -66,8 +66,8 @@ public class AnalyticsView extends ScrollPane {
         setHbarPolicy(ScrollBarPolicy.NEVER);
         setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
-        VBox root = new VBox(20);
-        root.setPadding(new Insets(24));
+        VBox root = new VBox(16);
+        root.setPadding(new Insets(16, 20, 16, 20));
         root.setMaxWidth(1000);
 
         // Header Row
@@ -88,6 +88,7 @@ public class AnalyticsView extends ScrollPane {
 
         Button refreshButton = new Button("Refresh");
         refreshButton.setId("analyticsRefreshButton");
+        refreshButton.getStyleClass().addAll("btn", "btn-secondary");
         refreshButton.setOnAction(e -> refreshAsync());
 
         statusLabel.getStyleClass().add("secondary");

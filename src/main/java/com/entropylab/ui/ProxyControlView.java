@@ -27,8 +27,8 @@ public class ProxyControlView extends VBox {
     public ProxyControlView(ProxyServerManager proxyServerManager) {
         this.proxyServerManager = proxyServerManager;
 
-        setPadding(new Insets(24));
-        setSpacing(16);
+        setPadding(new Insets(16, 20, 16, 20));
+        setSpacing(12);
         setAlignment(Pos.TOP_LEFT);
 
         // Port input row
@@ -39,16 +39,17 @@ public class ProxyControlView extends VBox {
         }
         portField = new TextField(String.valueOf(initialPort));
         portField.setId("proxyPortField");
-        portField.setPrefWidth(120);
-        portField.setMaxWidth(120);
+        portField.setPrefWidth(100);
+        portField.setMaxWidth(100);
 
-        HBox portBox = new HBox(12, portLabel, portField);
+        HBox portBox = new HBox(10, portLabel, portField);
         portBox.setAlignment(Pos.CENTER_LEFT);
 
         // Control button
         toggleButton = new Button("Start Proxy");
         toggleButton.setId("proxyToggleButton");
-        toggleButton.setPrefWidth(140);
+        toggleButton.getStyleClass().addAll("btn", "btn-primary");
+        toggleButton.setPrefWidth(120);
         toggleButton.setOnAction(e -> handleToggle());
 
         // Status row

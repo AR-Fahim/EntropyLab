@@ -3,67 +3,253 @@
     -fx-base: #FFFFFF;
     -fx-background-color: #FFFFFF;
     -fx-font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
 }
 
 /* Labels & Typography */
 .label {
-    -fx-text-fill: #212121;
+    -fx-text-fill: #1F2937;
 }
 
 .label.secondary {
-    -fx-text-fill: #555555;
+    -fx-text-fill: #6B7280;
 }
 
-/* Buttons */
+/* ============================================================
+   Buttons — Production-Grade Balanced Desktop Styling
+   ============================================================ */
 .button {
-    -fx-background-color: #FE0134;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-weight: bold;
+    -fx-background-color: #F3F4F6;
+    -fx-text-fill: #374151;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
     -fx-background-radius: 4px;
-    -fx-padding: 8px 16px;
+    -fx-border-color: #D1D5DB;
+    -fx-border-radius: 4px;
+    -fx-border-width: 1px;
+    -fx-padding: 4px 12px;
+    -fx-min-height: 28px;
+    -fx-pref-height: 28px;
     -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
 }
 
 .button:hover {
-    -fx-background-color: #D9012C;
+    -fx-background-color: #E5E7EB;
+    -fx-border-color: #9CA3AF;
+    -fx-text-fill: #111827;
 }
 
 .button:pressed {
-    -fx-background-color: #B80125;
+    -fx-background-color: #D1D5DB;
+    -fx-border-color: #6B7280;
 }
 
-/* Tabs */
+.button:disabled {
+    -fx-opacity: 0.45;
+    -fx-background-color: #F9FAFB;
+    -fx-border-color: #E5E7EB;
+    -fx-text-fill: #9CA3AF;
+}
+
+.button:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
+    -fx-border-color: #9CA3AF;
+}
+
+/* Primary Button (Brand CTA) */
+.button.btn-primary,
+.button.primary,
+.dialog-pane .button:default {
+    -fx-background-color: #FE0134;
+    -fx-text-fill: #FFFFFF;
+    -fx-border-color: transparent;
+}
+
+.button.btn-primary:hover,
+.button.primary:hover,
+.dialog-pane .button:default:hover {
+    -fx-background-color: #E0012E;
+    -fx-border-color: transparent;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button.btn-primary:pressed,
+.button.primary:pressed,
+.dialog-pane .button:default:pressed {
+    -fx-background-color: #B80125;
+    -fx-border-color: transparent;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button.btn-primary:disabled,
+.button.primary:disabled,
+.dialog-pane .button:default:disabled {
+    -fx-opacity: 0.45;
+    -fx-background-color: #FFA3B2;
+    -fx-border-color: transparent;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button.btn-primary:focused,
+.button.primary:focused,
+.dialog-pane .button:default:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Secondary Button */
+.button.btn-secondary,
+.button.secondary {
+    -fx-background-color: #F3F4F6;
+    -fx-text-fill: #374151;
+    -fx-border-color: #D1D5DB;
+}
+
+/* Danger Button (Delete / Destructive actions) */
+.button.btn-danger,
+.button.danger {
+    -fx-background-color: #FEF2F2;
+    -fx-text-fill: #DC2626;
+    -fx-border-color: #FECACA;
+}
+
+.button.btn-danger:hover,
+.button.danger:hover {
+    -fx-background-color: #FE0134;
+    -fx-border-color: #FE0134;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button.btn-danger:pressed,
+.button.danger:pressed {
+    -fx-background-color: #B80125;
+    -fx-border-color: #B80125;
+    -fx-text-fill: #FFFFFF;
+}
+
+.button.btn-danger:disabled,
+.button.danger:disabled {
+    -fx-opacity: 0.45;
+    -fx-background-color: #FFF5F5;
+    -fx-border-color: #FEE2E2;
+    -fx-text-fill: #FCA5A5;
+}
+
+/* Toolbars inside Views */
+.view-toolbar {
+    -fx-spacing: 8px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-min-height: 32px;
+    -fx-pref-height: 32px;
+    -fx-max-height: 32px;
+    -fx-padding: 0 0 2px 0;
+}
+
+.view-toolbar .button {
+    -fx-min-height: 28px;
+    -fx-pref-height: 28px;
+    -fx-max-height: 28px;
+    -fx-padding: 4px 12px;
+}
+
+/* ============================================================
+   Tabs — Clean, Balanced, No Blue Focus Rings
+   ============================================================ */
 .tab-pane {
     -fx-background-color: #FFFFFF;
-    -fx-tab-min-height: 32px;
+    -fx-tab-min-height: 34px;
+    -fx-tab-max-height: 34px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
+}
+
+.tab-pane:focused,
+.tab-pane:focused > .tab-header-area {
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 4px 0 4px;
+    -fx-background-color: #F3F4F6;
+    -fx-border-color: transparent transparent #E5E7EB transparent;
+    -fx-border-width: 0 0 1px 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
 }
 
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #F5F5F5;
+    -fx-background-color: #F3F4F6;
+}
+
+.tab-pane .tab-header-area .headers-region {
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
 }
 
 .tab {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    -fx-padding: 6px 14px;
+    -fx-padding: 0 16px;
+    -fx-min-height: 34px;
+    -fx-pref-height: 34px;
+    -fx-max-height: 34px;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
+}
+
+.tab:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.04);
 }
 
 .tab .tab-label {
-    -fx-text-fill: #555555;
-    -fx-font-weight: normal;
+    -fx-text-fill: #6B7280;
+    -fx-font-size: 12px;
+    -fx-font-weight: 500;
+}
+
+.tab:hover .tab-label {
+    -fx-text-fill: #111827;
 }
 
 .tab:selected {
     -fx-background-color: #FFFFFF;
     -fx-border-color: transparent transparent #FE0134 transparent;
-    -fx-border-width: 0 0 3px 0;
+    -fx-border-width: 0 0 2px 0;
+    -fx-background-insets: 0;
 }
 
 .tab:selected .tab-label {
-    -fx-text-fill: #FE0134;
-    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+.tab:focused,
+.tab:selected:focused,
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:focused,
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
+    -fx-background-insets: 0;
+}
+
+.focus-indicator,
+.tab .focus-indicator,
+.tab:focused .focus-indicator,
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator,
+.tab-pane:focused > .tab-header-area > .headers-region > .tab .focus-indicator {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-opacity: 0;
 }
 
 /* Tables */
@@ -71,6 +257,13 @@
     -fx-background-color: #FFFFFF;
     -fx-border-color: #E0E0E0;
     -fx-border-width: 1px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
+}
+
+.table-view:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
 }
 
 .table-view .column-header-background {
@@ -115,11 +308,18 @@
     -fx-border-color: #E0E0E0;
     -fx-border-radius: 4px;
     -fx-background-radius: 4px;
-    -fx-padding: 6px 10px;
+    -fx-padding: 4px 8px;
+    -fx-min-height: 28px;
+    -fx-pref-height: 28px;
+    -fx-font-size: 12px;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
 }
 
 .text-field:focused {
     -fx-border-color: #FE0134;
+    -fx-focus-color: transparent;
+    -fx-faint-focus: transparent;
 }
 
 /* Dialogs */
@@ -138,6 +338,13 @@
 .dialog-pane .header-panel .label {
     -fx-text-fill: #212121;
     -fx-font-weight: bold;
+}
+
+.dialog-pane .button-bar .button {
+    -fx-min-height: 28px;
+    -fx-pref-height: 28px;
+    -fx-padding: 4px 14px;
+    -fx-font-size: 12px;
 }
 
 /* Check Boxes */
@@ -269,6 +476,8 @@
 
 .title-bar-theme-btn {
     -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
     -fx-background-radius: 6px;
     -fx-padding: 0;
     -fx-min-width: 32px;
@@ -283,6 +492,7 @@
 
 .title-bar-theme-btn:hover {
     -fx-background-color: #E5E7EB;
+    -fx-border-color: transparent;
 }
 
 .title-bar-theme-icon {
@@ -291,6 +501,8 @@
 
 .title-bar-btn {
     -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
     -fx-background-radius: 0;
     -fx-padding: 0;
     -fx-min-width: 46px;
@@ -305,6 +517,7 @@
 
 .title-bar-btn:hover {
     -fx-background-color: #E5E7EB;
+    -fx-border-color: transparent;
 }
 
 .title-bar-btn .title-bar-glyph {

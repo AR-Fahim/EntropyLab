@@ -72,11 +72,12 @@ public class InspectorView extends VBox {
         this.logDao = logDao;
         this.mockManagementView = mockManagementView;
 
-        setPadding(new Insets(16));
-        setSpacing(12);
+        setPadding(new Insets(14, 16, 14, 16));
+        setSpacing(10);
 
         saveAsMockButton = new Button("Save as Mock");
         saveAsMockButton.setId("saveAsMockButton");
+        saveAsMockButton.getStyleClass().addAll("btn", "btn-secondary");
 
         List<RequestLogEntry> recentLogs = logDao.getRecent(100);
         logList = FXCollections.observableArrayList(recentLogs);
@@ -105,6 +106,7 @@ public class InspectorView extends VBox {
         });
 
         HBox toolbar = new HBox(saveAsMockButton);
+        toolbar.getStyleClass().add("view-toolbar");
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
         TableColumn<RequestLogEntry, String> timeCol = new TableColumn<>("Time");

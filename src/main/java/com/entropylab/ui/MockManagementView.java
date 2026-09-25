@@ -45,8 +45,8 @@ public class MockManagementView extends VBox {
     private final Button deleteMockButton;
 
     public MockManagementView() {
-        setPadding(new Insets(16));
-        setSpacing(12);
+        setPadding(new Insets(14, 16, 14, 16));
+        setSpacing(10);
 
         List<MockMapping> existingMocks = ConfigManager.getInstance().getConfig() != null
                 && ConfigManager.getInstance().getConfig().getMockMappings() != null
@@ -61,10 +61,12 @@ public class MockManagementView extends VBox {
         // Toolbar with Add, Edit, Delete Buttons
         addMockButton = new Button("Add Mock");
         addMockButton.setId("addMockButton");
+        addMockButton.getStyleClass().addAll("btn", "btn-primary");
         addMockButton.setOnAction(e -> showAddMockDialog());
 
         editMockButton = new Button("Edit Mock");
         editMockButton.setId("editMockButton");
+        editMockButton.getStyleClass().addAll("btn", "btn-secondary");
         editMockButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
         editMockButton.setOnAction(e -> {
             MockMapping selected = tableView.getSelectionModel().getSelectedItem();
@@ -75,6 +77,7 @@ public class MockManagementView extends VBox {
 
         deleteMockButton = new Button("Delete Mock");
         deleteMockButton.setId("deleteMockButton");
+        deleteMockButton.getStyleClass().addAll("btn", "btn-danger");
         deleteMockButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
         deleteMockButton.setOnAction(e -> {
             MockMapping selected = tableView.getSelectionModel().getSelectedItem();
@@ -84,6 +87,7 @@ public class MockManagementView extends VBox {
         });
 
         HBox toolbar = new HBox(8, addMockButton, editMockButton, deleteMockButton);
+        toolbar.getStyleClass().add("view-toolbar");
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
         TableColumn<MockMapping, String> localPathCol = new TableColumn<>("Local Path");
@@ -197,6 +201,7 @@ public class MockManagementView extends VBox {
 
         Button chooseFileButton = new Button("Choose File...");
         chooseFileButton.setId("chooseMockFileButton");
+        chooseFileButton.getStyleClass().addAll("btn", "btn-secondary");
         chooseFileButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choose Mock JSON File");
@@ -298,6 +303,7 @@ public class MockManagementView extends VBox {
 
         Button chooseFileButton = new Button("Choose File...");
         chooseFileButton.setId("editChooseMockFileButton");
+        chooseFileButton.getStyleClass().addAll("btn", "btn-secondary");
         chooseFileButton.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Choose Mock JSON File");
