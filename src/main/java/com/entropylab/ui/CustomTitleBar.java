@@ -123,7 +123,10 @@ public class CustomTitleBar extends HBox {
 
         getChildren().addAll(brandBox, spacer, rightBox);
 
-        // Window dragging support
+        // Register title bar in stage properties for WindowResizeHelper coordination
+        stage.getProperties().put("customTitleBar", this);
+
+        // Window dragging support with drag-to-restore
         setOnMousePressed(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
                 xOffset = event.getSceneX();
@@ -132,16 +135,48 @@ public class CustomTitleBar extends HBox {
         });
 
         setOnMouseDragged(event -> {
-            if (event.getButton() == MouseButton.PRIMARY && !isMaximized) {
-                stage.setX(event.getScreenX() - xOffset);
-                stage.setY(event.getScreenY() - yOffset);
+            if (event.getButton() == MouseButton.PRIMARY) {
+                if (isMaximized) {
+                    // Restore smoothly on drag like native Windows apps
+                    double currentWidth = stage.getWidth();
+                    double mouseX = event.getScreenX();
+                    double ratio = currentWidth > 0 ? (event.getSceneX() / currentWidth) : 0.5;
+
+                    double restoreW = prevW > 0 ? prevW : 1000;
+                    double restoreH = prevH > 0 ? prevH : 700;
+
+                    stage.setWidth(restoreW);
+                    stage.setHeight(restoreH);
+
+                    double newX = mouseX - (restoreW * ratio);
+                    double newY = event.getScreenY() - yOffset;
+                    stage.setX(newX);
+                    stage.setY(newY);
+
+                    xOffset = restoreW * ratio;
+                    isMaximized = false;
+                    stage.getProperties().put("customMaximized", Boolean.FALSE);
+                    updateMaxBtnGraphic(false);
+                } else {
+                    stage.setX(event.getScreenX() - xOffset);
+                    stage.setY(event.getScreenY() - yOffset);
+                }
             }
         });
 
-        // Double click to maximize/restore
+        // Double click anywhere on title bar (except buttons) to maximize/restore
         setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                if (event.getTarget() == this || event.getTarget() == brandBox || event.getTarget() == titleLabel || event.getTarget() == spacer) {
+                javafx.scene.Node target = (javafx.scene.Node) event.getTarget();
+                boolean isButton = false;
+                while (target != null && target != this) {
+                    if (target instanceof Button) {
+                        isButton = true;
+                        break;
+                    }
+                    target = target.getParent();
+                }
+                if (!isButton) {
                     toggleMaximize();
                 }
             }
@@ -164,6 +199,8 @@ public class CustomTitleBar extends HBox {
             prevY = stage.getY();
             prevW = stage.getWidth();
             prevH = stage.getHeight();
+            if (prevW < 850) prevW = 1000;
+            if (prevH < 550) prevH = 700;
 
             Screen screen = Screen.getScreensForRectangle(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight())
                     .stream().findFirst().orElse(Screen.getPrimary());
@@ -174,13 +211,15 @@ public class CustomTitleBar extends HBox {
             stage.setWidth(bounds.getWidth());
             stage.setHeight(bounds.getHeight());
             isMaximized = true;
+            stage.getProperties().put("customMaximized", Boolean.TRUE);
             updateMaxBtnGraphic(true);
         } else {
             stage.setX(prevX);
             stage.setY(prevY);
-            stage.setWidth(prevW);
-            stage.setHeight(prevH);
+            stage.setWidth(prevW > 0 ? prevW : 1000);
+            stage.setHeight(prevH > 0 ? prevH : 700);
             isMaximized = false;
+            stage.getProperties().put("customMaximized", Boolean.FALSE);
             updateMaxBtnGraphic(false);
         }
     }

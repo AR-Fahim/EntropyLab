@@ -100,6 +100,8 @@ public class Main extends Application {
 
         primaryStage.initStyle(javafx.stage.StageStyle.UNDECORATED);
         primaryStage.setTitle("EntropyLab");
+        primaryStage.setMinWidth(850);
+        primaryStage.setMinHeight(550);
         primaryStage.setScene(scene);
 
         // Enable edge resizing for undecorated window

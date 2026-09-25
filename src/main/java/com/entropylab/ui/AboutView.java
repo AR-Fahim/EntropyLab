@@ -32,7 +32,8 @@ public class AboutView extends ScrollPane {
 
         VBox contentBox = new VBox(20);
         contentBox.setPadding(new Insets(24));
-        contentBox.setMaxWidth(920);
+        contentBox.setMaxWidth(Double.MAX_VALUE);
+        contentBox.setFillWidth(true);
 
         // 1. App Introduction Card
         contentBox.getChildren().add(createAppCard());
@@ -52,6 +53,7 @@ public class AboutView extends ScrollPane {
     private VBox createAppCard() {
         VBox card = new VBox(12);
         card.getStyleClass().add("card-pane");
+        card.setMaxWidth(Double.MAX_VALUE);
 
         HBox headerRow = new HBox(16);
         headerRow.setAlignment(Pos.CENTER_LEFT);
@@ -101,6 +103,7 @@ public class AboutView extends ScrollPane {
     private VBox createDeveloperCard() {
         VBox card = new VBox(14);
         card.getStyleClass().add("card-pane");
+        card.setMaxWidth(Double.MAX_VALUE);
 
         Label sectionTitle = new Label("About the Developer");
         sectionTitle.getStyleClass().add("card-title");
@@ -178,6 +181,7 @@ public class AboutView extends ScrollPane {
     private VBox createHowToUseCard() {
         VBox card = new VBox(12);
         card.getStyleClass().add("card-pane");
+        card.setMaxWidth(Double.MAX_VALUE);
 
         Label title = new Label("How to Use");
         title.getStyleClass().add("card-title");
@@ -225,6 +229,7 @@ public class AboutView extends ScrollPane {
     private VBox createCreditsCard() {
         VBox card = new VBox(12);
         card.getStyleClass().add("card-pane");
+        card.setMaxWidth(Double.MAX_VALUE);
 
         Label title = new Label("Credits & Open-Source Libraries");
         title.getStyleClass().add("card-title");

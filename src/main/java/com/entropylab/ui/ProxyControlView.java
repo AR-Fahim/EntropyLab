@@ -28,22 +28,33 @@ public class ProxyControlView extends VBox {
         this.proxyServerManager = proxyServerManager;
 
         setPadding(new Insets(16, 20, 16, 20));
-        setSpacing(12);
+        setSpacing(16);
         setAlignment(Pos.TOP_LEFT);
+        setMaxWidth(Double.MAX_VALUE);
+        setFillWidth(true);
 
-        // Port input row
-        Label portLabel = new Label("Port:");
         int initialPort = 8080;
         if (ConfigManager.getInstance().getConfig() != null && ConfigManager.getInstance().getConfig().getProxyPort() > 0) {
             initialPort = ConfigManager.getInstance().getConfig().getProxyPort();
         }
+
+        // Card 1: Server Status & Control Card
+        VBox serverCard = new VBox(14);
+        serverCard.getStyleClass().add("card-pane");
+        serverCard.setMaxWidth(Double.MAX_VALUE);
+
+        Label cardTitle = new Label("Proxy Server Control");
+        cardTitle.getStyleClass().add("card-title");
+
+        Label cardSubtitle = new Label("Intercept and route HTTP traffic through local port with active chaos simulation");
+        cardSubtitle.getStyleClass().add("secondary");
+
+        // Port input
+        Label portLabel = new Label("Port:");
         portField = new TextField(String.valueOf(initialPort));
         portField.setId("proxyPortField");
         portField.setPrefWidth(100);
         portField.setMaxWidth(100);
-
-        HBox portBox = new HBox(10, portLabel, portField);
-        portBox.setAlignment(Pos.CENTER_LEFT);
 
         // Control button
         toggleButton = new Button("Start Proxy");
@@ -52,21 +63,60 @@ public class ProxyControlView extends VBox {
         toggleButton.setPrefWidth(120);
         toggleButton.setOnAction(e -> handleToggle());
 
-        // Status row
+        // Status
         Label statusTitle = new Label("Status:");
         statusLabel = new Label("Stopped");
         statusLabel.setId("proxyStatusLabel");
         statusLabel.setStyle("-fx-text-fill: #FE0134; -fx-font-weight: bold;");
 
-        HBox statusBox = new HBox(8, statusTitle, statusLabel);
-        statusBox.setAlignment(Pos.CENTER_LEFT);
+        HBox controlRow = new HBox(12, portLabel, portField, toggleButton, statusTitle, statusLabel);
+        controlRow.setAlignment(Pos.CENTER_LEFT);
 
-        getChildren().addAll(portBox, toggleButton, statusBox);
+        serverCard.getChildren().addAll(cardTitle, cardSubtitle, controlRow);
+
+        // Card 2: Client Routing & Integration Guide
+        VBox guideCard = new VBox(12);
+        guideCard.getStyleClass().add("card-pane");
+        guideCard.setMaxWidth(Double.MAX_VALUE);
+
+        Label guideTitle = new Label("Client Routing & Integration");
+        guideTitle.getStyleClass().add("card-title");
+
+        Label guideDesc = new Label("Direct your frontend, microservices, or API testing clients to EntropyLab using any of these methods:");
+        guideDesc.getStyleClass().add("secondary");
+
+        VBox examplesBox = new VBox(10);
+        examplesBox.getChildren().addAll(
+                createGuideRow("Target URL Direct", "http://127.0.0.1:" + initialPort + "/<localPath>", "Send HTTP requests directly to mapped path prefixes"),
+                createGuideRow("System / CLI Proxy", "export HTTP_PROXY=http://127.0.0.1:" + initialPort, "Forward global CLI tools, curl, and SDK requests"),
+                createGuideRow("Live Inspection", "Switch to the Inspector tab", "View streaming live requests, latencies, and payload mutations in real-time")
+        );
+
+        guideCard.getChildren().addAll(guideTitle, guideDesc, examplesBox);
+
+        getChildren().addAll(serverCard, guideCard);
 
         // Initialize state if already running
         if (proxyServerManager.isRunning()) {
             updateUiState(true, initialPort);
         }
+    }
+
+    private HBox createGuideRow(String labelText, String codeText, String descText) {
+        HBox row = new HBox(12);
+        row.setAlignment(Pos.CENTER_LEFT);
+
+        Label label = new Label(labelText + ":");
+        label.setStyle("-fx-font-weight: bold; -fx-min-width: 140px;");
+
+        Label codeLabel = new Label(codeText);
+        codeLabel.setStyle("-fx-font-family: 'Consolas', monospace; -fx-background-color: rgba(254, 1, 52, 0.08); -fx-padding: 3px 8px; -fx-background-radius: 4px;");
+
+        Label desc = new Label(descText);
+        desc.getStyleClass().add("secondary");
+
+        row.getChildren().addAll(label, codeLabel, desc);
+        return row;
     }
 
     public void handleToggle() {
@@ -104,11 +154,19 @@ public class ProxyControlView extends VBox {
             statusLabel.setText("Running on port " + port);
             statusLabel.setStyle("-fx-text-fill: #2e7d32; -fx-font-weight: bold;");
             toggleButton.setText("Stop Proxy");
+            toggleButton.getStyleClass().remove("btn-primary");
+            if (!toggleButton.getStyleClass().contains("btn-danger")) {
+                toggleButton.getStyleClass().add("btn-danger");
+            }
             portField.setDisable(true);
         } else {
             statusLabel.setText("Stopped");
             statusLabel.setStyle("-fx-text-fill: #FE0134; -fx-font-weight: bold;");
             toggleButton.setText("Start Proxy");
+            toggleButton.getStyleClass().remove("btn-danger");
+            if (!toggleButton.getStyleClass().contains("btn-primary")) {
+                toggleButton.getStyleClass().add("btn-primary");
+            }
             portField.setDisable(false);
         }
     }

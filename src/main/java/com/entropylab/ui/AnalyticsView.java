@@ -68,11 +68,13 @@ public class AnalyticsView extends ScrollPane {
 
         VBox root = new VBox(16);
         root.setPadding(new Insets(16, 20, 16, 20));
-        root.setMaxWidth(1000);
+        root.setMaxWidth(Double.MAX_VALUE);
+        root.setFillWidth(true);
 
         // Header Row
         HBox headerRow = new HBox(12);
         headerRow.setAlignment(Pos.CENTER_LEFT);
+        headerRow.setMaxWidth(Double.MAX_VALUE);
 
         VBox titleBox = new VBox(4);
         Label title = new Label("Traffic & Fault Analytics");
@@ -103,6 +105,7 @@ public class AnalyticsView extends ScrollPane {
         // KPI Cards Row
         HBox kpiRow = new HBox(12);
         kpiRow.setAlignment(Pos.CENTER);
+        kpiRow.setMaxWidth(Double.MAX_VALUE);
 
         VBox cardTotal = createKpiCard("TOTAL REQUESTS", totalRequestsLabel, "All proxy requests");
         VBox cardError = createKpiCard("ERROR RATE", errorRateLabel, "Status ≥ 400 or Chaos");
@@ -122,6 +125,8 @@ public class AnalyticsView extends ScrollPane {
         // Chart Card
         VBox chartCard = new VBox(12);
         chartCard.getStyleClass().add("card-pane");
+        chartCard.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(chartCard, Priority.ALWAYS);
 
         Label chartTitle = new Label("Response Status & Traffic Distribution");
         chartTitle.getStyleClass().add("card-title");
@@ -137,7 +142,9 @@ public class AnalyticsView extends ScrollPane {
         barChart.setTitle(null);
         barChart.setLegendVisible(false);
         barChart.setAnimated(false);
-        barChart.setPrefHeight(320);
+        barChart.setPrefHeight(340);
+        barChart.setMaxWidth(Double.MAX_VALUE);
+        VBox.setVgrow(barChart, Priority.ALWAYS);
 
         series.setName("Requests");
         barChart.getData().add(series);

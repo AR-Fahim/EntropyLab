@@ -47,8 +47,28 @@ public class WindowResizeHelper {
         scene.addEventHandler(MouseEvent.MOUSE_RELEASED, this::handleMouseReleased);
     }
 
+    private boolean isWindowMaximized() {
+        if (stage.isMaximized()) {
+            return true;
+        }
+        Object customMax = stage.getProperties().get("customMaximized");
+        if (Boolean.TRUE.equals(customMax)) {
+            return true;
+        }
+        Object tb = stage.getProperties().get("customTitleBar");
+        if (tb instanceof CustomTitleBar) {
+            return ((CustomTitleBar) tb).isWindowMaximized();
+        }
+        return false;
+    }
+
     private void handleMouseMoved(MouseEvent t) {
-        if (isResizing || stage.isMaximized()) {
+        if (isResizing || isWindowMaximized()) {
+            Scene scene = stage.getScene();
+            if (scene != null && cursorEvent != Cursor.DEFAULT) {
+                cursorEvent = Cursor.DEFAULT;
+                scene.setCursor(Cursor.DEFAULT);
+            }
             return;
         }
 
@@ -87,7 +107,7 @@ public class WindowResizeHelper {
     }
 
     private void handleMousePressed(MouseEvent t) {
-        if (cursorEvent != Cursor.DEFAULT && !stage.isMaximized()) {
+        if (cursorEvent != Cursor.DEFAULT && !isWindowMaximized()) {
             isResizing = true;
             startScreenX = t.getScreenX();
             startScreenY = t.getScreenY();
