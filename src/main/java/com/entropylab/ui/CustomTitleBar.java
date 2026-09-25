@@ -206,6 +206,38 @@ public class CustomTitleBar extends HBox {
                 }
             }
         });
+
+        // Sync maximize / restore icon when OS resizes or snaps the stage (e.g. Win+Left, Win+Right, Win+Up)
+        javafx.beans.value.ChangeListener<Number> boundsListener = (obs, oldVal, newVal) -> {
+            Screen screen = getCurrentScreen();
+            if (screen != null) {
+                Rectangle2D vb = screen.getVisualBounds();
+                boolean matchesMax = Math.abs(stage.getX() - vb.getMinX()) < 10
+                        && Math.abs(stage.getY() - vb.getMinY()) < 10
+                        && Math.abs(stage.getWidth() - vb.getWidth()) < 10
+                        && Math.abs(stage.getHeight() - vb.getHeight()) < 10;
+                if (matchesMax && !isMaximized) {
+                    isMaximized = true;
+                    isSnapped = false;
+                    stage.getProperties().put("customMaximized", Boolean.TRUE);
+                    updateMaxBtnGraphic(true);
+                } else if (!matchesMax && isMaximized) {
+                    isMaximized = false;
+                    stage.getProperties().put("customMaximized", Boolean.FALSE);
+                    updateMaxBtnGraphic(false);
+                }
+            }
+        };
+        stage.widthProperty().addListener(boundsListener);
+        stage.heightProperty().addListener(boundsListener);
+        stage.xProperty().addListener(boundsListener);
+        stage.yProperty().addListener(boundsListener);
+
+        stage.maximizedProperty().addListener((obs, oldVal, newVal) -> {
+            isMaximized = newVal;
+            stage.getProperties().put("customMaximized", newVal);
+            updateMaxBtnGraphic(newVal);
+        });
     }
 
     private void updateThemeDisplay(ThemeManager.Theme theme) {

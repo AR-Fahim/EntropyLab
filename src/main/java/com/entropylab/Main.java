@@ -108,6 +108,9 @@ public class Main extends Application {
         com.entropylab.ui.WindowResizeHelper.install(primaryStage, 10, 850, 550);
 
         primaryStage.show();
+
+        // Register window with Windows DWM for native Aero Snap (Win+Left/Right) and split-screen capability
+        com.entropylab.ui.WindowsSnapHelper.enableSnap(primaryStage, 850, 550);
     }
 
     public static void main(String[] args) {
