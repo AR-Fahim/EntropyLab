@@ -3,6 +3,7 @@ package com.entropylab.ui;
 import com.entropylab.config.ConfigManager;
 import com.entropylab.model.MockMapping;
 import com.entropylab.util.PathUtil;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -14,12 +15,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -29,25 +34,19 @@ import javafx.stage.Window;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 public class MockManagementView extends VBox {
 
     private final TableView<MockMapping> tableView;
     private final ObservableList<MockMapping> mockList;
     private final Button addMockButton;
-
-    // Delete functionality deferred to a future milestone / optional.
+    private final Button editMockButton;
+    private final Button deleteMockButton;
 
     public MockManagementView() {
         setPadding(new Insets(16));
         setSpacing(12);
-
-        addMockButton = new Button("Add Mock");
-        addMockButton.setId("addMockButton");
-        addMockButton.setOnAction(e -> showAddMockDialog());
-
-        HBox toolbar = new HBox(addMockButton);
-        toolbar.setAlignment(Pos.CENTER_LEFT);
 
         List<MockMapping> existingMocks = ConfigManager.getInstance().getConfig() != null
                 && ConfigManager.getInstance().getConfig().getMockMappings() != null
@@ -58,6 +57,34 @@ public class MockManagementView extends VBox {
         tableView = new TableView<>(mockList);
         tableView.setEditable(true);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        // Toolbar with Add, Edit, Delete Buttons
+        addMockButton = new Button("Add Mock");
+        addMockButton.setId("addMockButton");
+        addMockButton.setOnAction(e -> showAddMockDialog());
+
+        editMockButton = new Button("Edit Mock");
+        editMockButton.setId("editMockButton");
+        editMockButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+        editMockButton.setOnAction(e -> {
+            MockMapping selected = tableView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                showEditMockDialog(selected);
+            }
+        });
+
+        deleteMockButton = new Button("Delete Mock");
+        deleteMockButton.setId("deleteMockButton");
+        deleteMockButton.disableProperty().bind(tableView.getSelectionModel().selectedItemProperty().isNull());
+        deleteMockButton.setOnAction(e -> {
+            MockMapping selected = tableView.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                confirmAndDeleteMock(selected);
+            }
+        });
+
+        HBox toolbar = new HBox(8, addMockButton, editMockButton, deleteMockButton);
+        toolbar.setAlignment(Pos.CENTER_LEFT);
 
         TableColumn<MockMapping, String> localPathCol = new TableColumn<>("Local Path");
         localPathCol.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getLocalPath()));
@@ -91,6 +118,50 @@ public class MockManagementView extends VBox {
 
         tableView.getColumns().addAll(localPathCol, filePathCol, autoGenCol, enabledCol);
         VBox.setVgrow(tableView, Priority.ALWAYS);
+
+        // Row factory for ContextMenu (Edit, Delete) and double-click to edit
+        tableView.setRowFactory(tv -> {
+            TableRow<MockMapping> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem editItem = new MenuItem("Edit");
+            editItem.setOnAction(e -> {
+                MockMapping item = row.getItem();
+                if (item != null) {
+                    showEditMockDialog(item);
+                }
+            });
+            MenuItem deleteItem = new MenuItem("Delete");
+            deleteItem.setOnAction(e -> {
+                MockMapping item = row.getItem();
+                if (item != null) {
+                    confirmAndDeleteMock(item);
+                }
+            });
+            contextMenu.getItems().addAll(editItem, deleteItem);
+
+            row.contextMenuProperty().bind(
+                    Bindings.when(row.emptyProperty())
+                            .then((ContextMenu) null)
+                            .otherwise(contextMenu)
+            );
+
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    showEditMockDialog(row.getItem());
+                }
+            });
+
+            return row;
+        });
+
+        tableView.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                MockMapping selected = tableView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    showEditMockDialog(selected);
+                }
+            }
+        });
 
         getChildren().addAll(toolbar, tableView);
     }
@@ -193,6 +264,141 @@ public class MockManagementView extends VBox {
         return true;
     }
 
+    public void showEditMockDialog(MockMapping mapping) {
+        if (mapping == null) {
+            return;
+        }
+
+        Dialog<ButtonType> dialog = buildEditMockDialog(mapping);
+        dialog.showAndWait();
+    }
+
+    public Dialog<ButtonType> buildEditMockDialog(MockMapping mapping) {
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Edit Mock");
+        dialog.setHeaderText("Edit Mock Endpoint Configuration");
+
+        ThemeManager.getInstance().styleDialog(dialog);
+
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 20, 10, 10));
+
+        TextField localPathField = new TextField(mapping.getLocalPath());
+        localPathField.setId("editMockLocalPathField");
+
+        Label selectedFileLabel = new Label(mapping.getFilePath() != null ? mapping.getFilePath() : "No file selected");
+        selectedFileLabel.setId("editSelectedFileLabel");
+
+        final File[] chosenFile = new File[]{mapping.getFilePath() != null ? new File(mapping.getFilePath()) : null};
+
+        Button chooseFileButton = new Button("Choose File...");
+        chooseFileButton.setId("editChooseMockFileButton");
+        chooseFileButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Choose Mock JSON File");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files (*.json)", "*.json"));
+            if (chosenFile[0] != null && chosenFile[0].getParentFile() != null && chosenFile[0].getParentFile().exists()) {
+                fileChooser.setInitialDirectory(chosenFile[0].getParentFile());
+            }
+            Window window = dialog.getDialogPane().getScene() != null ? dialog.getDialogPane().getScene().getWindow() : null;
+            File file = fileChooser.showOpenDialog(window);
+            if (file != null) {
+                chosenFile[0] = file;
+                selectedFileLabel.setText(file.getAbsolutePath());
+            }
+        });
+
+        HBox fileBox = new HBox(8, chooseFileButton, selectedFileLabel);
+        fileBox.setAlignment(Pos.CENTER_LEFT);
+
+        grid.add(new Label("Local Path:"), 0, 0);
+        grid.add(localPathField, 1, 0);
+        grid.add(new Label("Mock File:"), 0, 1);
+        grid.add(fileBox, 1, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        Button saveButton = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
+        saveButton.addEventFilter(ActionEvent.ACTION, event -> {
+            String localPath = localPathField.getText();
+            boolean success = updateMock(mapping, localPath, chosenFile[0]);
+            if (!success) {
+                event.consume();
+            }
+        });
+
+        return dialog;
+    }
+
+    public boolean updateMock(MockMapping mapping, String localPath, File selectedFile) {
+        if (mapping == null) {
+            return false;
+        }
+        if (localPath == null || localPath.trim().isEmpty()) {
+            showThemedAlert(Alert.AlertType.WARNING, "Validation Error", "Local Path is required");
+            return false;
+        }
+
+        String normalizedLocalPath = PathUtil.normalize(localPath.trim());
+        boolean duplicate = ConfigManager.getInstance().getConfig().getMockMappings().stream()
+                .anyMatch(m -> m.getId() != mapping.getId() && m.getLocalPath() != null
+                        && PathUtil.normalize(m.getLocalPath()).equals(normalizedLocalPath));
+
+        if (duplicate) {
+            showThemedAlert(Alert.AlertType.WARNING, "Duplicate Mock", "A mock for this path already exists");
+            return false;
+        }
+
+        if (selectedFile == null || !selectedFile.exists()) {
+            showThemedAlert(Alert.AlertType.WARNING, "Validation Error", "Please choose a valid existing .json file");
+            return false;
+        }
+
+        mapping.setLocalPath(normalizedLocalPath);
+        mapping.setFilePath(selectedFile.getAbsolutePath());
+        tableView.refresh();
+        ConfigManager.getInstance().save();
+        return true;
+    }
+
+    public boolean confirmAndDeleteMock(MockMapping mapping) {
+        if (mapping == null) {
+            return false;
+        }
+        boolean confirmed = showThemedConfirmation("Confirm Deletion", "Delete mock for '" + mapping.getLocalPath() + "'?");
+        if (confirmed) {
+            deleteMock(mapping);
+            return true;
+        }
+        return false;
+    }
+
+    public void deleteMock(MockMapping mapping) {
+        if (mapping == null) {
+            return;
+        }
+        ConfigManager.getInstance().getConfig().getMockMappings().remove(mapping);
+        mockList.remove(mapping);
+        ConfigManager.getInstance().save();
+        tableView.refresh();
+    }
+
+    protected boolean showThemedConfirmation(String title, String content) {
+        ButtonType yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, content, yesButton, noButton);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        ThemeManager.getInstance().styleDialog(alert);
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == yesButton;
+    }
+
     protected void showThemedAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
@@ -221,5 +427,13 @@ public class MockManagementView extends VBox {
 
     public Button getAddMockButton() {
         return addMockButton;
+    }
+
+    public Button getEditMockButton() {
+        return editMockButton;
+    }
+
+    public Button getDeleteMockButton() {
+        return deleteMockButton;
     }
 }
