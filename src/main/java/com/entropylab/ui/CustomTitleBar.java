@@ -41,6 +41,7 @@ public class CustomTitleBar extends HBox {
     private double xOffset = 0;
     private double yOffset = 0;
     private boolean isMaximized = false;
+    private boolean isSnapped = false;
     private double prevX, prevY, prevW, prevH;
 
     private final SVGPath themeSvg = new SVGPath();
@@ -136,7 +137,7 @@ public class CustomTitleBar extends HBox {
 
         setOnMouseDragged(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {
-                if (isMaximized) {
+                if (isMaximized || isSnapped) {
                     // Restore smoothly on drag like native Windows apps
                     double currentWidth = stage.getWidth();
                     double mouseX = event.getScreenX();
@@ -155,11 +156,35 @@ public class CustomTitleBar extends HBox {
 
                     xOffset = restoreW * ratio;
                     isMaximized = false;
+                    isSnapped = false;
                     stage.getProperties().put("customMaximized", Boolean.FALSE);
                     updateMaxBtnGraphic(false);
                 } else {
                     stage.setX(event.getScreenX() - xOffset);
                     stage.setY(event.getScreenY() - yOffset);
+                }
+            }
+        });
+
+        // Snap to edges when released near screen borders
+        setOnMouseReleased(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                double screenX = event.getScreenX();
+                double screenY = event.getScreenY();
+                Screen screen = getCurrentScreen();
+                Rectangle2D bounds = screen.getVisualBounds();
+
+                // Drag to top edge (within 8px) -> Maximize
+                if (screenY <= bounds.getMinY() + 8) {
+                    maximizeWindow();
+                }
+                // Drag to left edge (within 8px) -> Snap Left
+                else if (screenX <= bounds.getMinX() + 8) {
+                    snapLeft();
+                }
+                // Drag to right edge (within 8px) -> Snap Right
+                else if (screenX >= bounds.getMaxX() - 8) {
+                    snapRight();
                 }
             }
         });
@@ -194,16 +219,17 @@ public class CustomTitleBar extends HBox {
     }
 
     public void toggleMaximize() {
-        if (!isMaximized) {
-            prevX = stage.getX();
-            prevY = stage.getY();
-            prevW = stage.getWidth();
-            prevH = stage.getHeight();
-            if (prevW < 850) prevW = 1000;
-            if (prevH < 550) prevH = 700;
+        if (isMaximized) {
+            restoreWindow();
+        } else {
+            maximizeWindow();
+        }
+    }
 
-            Screen screen = Screen.getScreensForRectangle(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight())
-                    .stream().findFirst().orElse(Screen.getPrimary());
+    public void maximizeWindow() {
+        if (!isMaximized) {
+            saveFloatingBoundsIfNeeded();
+            Screen screen = getCurrentScreen();
             Rectangle2D bounds = screen.getVisualBounds();
 
             stage.setX(bounds.getMinX());
@@ -211,17 +237,69 @@ public class CustomTitleBar extends HBox {
             stage.setWidth(bounds.getWidth());
             stage.setHeight(bounds.getHeight());
             isMaximized = true;
+            isSnapped = false;
             stage.getProperties().put("customMaximized", Boolean.TRUE);
             updateMaxBtnGraphic(true);
-        } else {
-            stage.setX(prevX);
-            stage.setY(prevY);
+        }
+    }
+
+    public void restoreWindow() {
+        if (isMaximized || isSnapped) {
+            stage.setX(prevX > 0 ? prevX : 100);
+            stage.setY(prevY > 0 ? prevY : 100);
             stage.setWidth(prevW > 0 ? prevW : 1000);
             stage.setHeight(prevH > 0 ? prevH : 700);
             isMaximized = false;
+            isSnapped = false;
             stage.getProperties().put("customMaximized", Boolean.FALSE);
             updateMaxBtnGraphic(false);
         }
+    }
+
+    public void snapLeft() {
+        saveFloatingBoundsIfNeeded();
+        Screen screen = getCurrentScreen();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        stage.setX(bounds.getMinX());
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth() / 2.0);
+        stage.setHeight(bounds.getHeight());
+        isMaximized = false;
+        isSnapped = true;
+        stage.getProperties().put("customMaximized", Boolean.FALSE);
+        updateMaxBtnGraphic(false);
+    }
+
+    public void snapRight() {
+        saveFloatingBoundsIfNeeded();
+        Screen screen = getCurrentScreen();
+        Rectangle2D bounds = screen.getVisualBounds();
+
+        stage.setX(bounds.getMinX() + (bounds.getWidth() / 2.0));
+        stage.setY(bounds.getMinY());
+        stage.setWidth(bounds.getWidth() / 2.0);
+        stage.setHeight(bounds.getHeight());
+        isMaximized = false;
+        isSnapped = true;
+        stage.getProperties().put("customMaximized", Boolean.FALSE);
+        updateMaxBtnGraphic(false);
+    }
+
+    private void saveFloatingBoundsIfNeeded() {
+        if (!isMaximized && !isSnapped) {
+            prevX = stage.getX();
+            prevY = stage.getY();
+            prevW = stage.getWidth();
+            prevH = stage.getHeight();
+            if (prevW < 850) prevW = 1000;
+            if (prevH < 550) prevH = 700;
+        }
+    }
+
+    private Screen getCurrentScreen() {
+        return Screen.getScreensForRectangle(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight())
+                .stream().findFirst().orElse(Screen.getPrimary());
     }
 
     private void updateMaxBtnGraphic(boolean maximized) {
@@ -236,5 +314,9 @@ public class CustomTitleBar extends HBox {
 
     public boolean isWindowMaximized() {
         return isMaximized;
+    }
+
+    public boolean isWindowSnapped() {
+        return isSnapped;
     }
 }

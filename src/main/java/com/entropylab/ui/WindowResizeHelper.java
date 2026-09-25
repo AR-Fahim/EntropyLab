@@ -1,8 +1,9 @@
 package com.entropylab.ui;
 
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -24,7 +25,7 @@ public class WindowResizeHelper {
 
     private WindowResizeHelper(Stage stage, int borderSize, double minWidth, double minHeight) {
         this.stage = stage;
-        this.borderSize = borderSize;
+        this.borderSize = Math.max(borderSize, 10);
         this.minWidth = minWidth;
         this.minHeight = minHeight;
 
@@ -41,47 +42,89 @@ public class WindowResizeHelper {
     }
 
     private void attachListeners(Scene scene) {
-        scene.addEventHandler(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
-        scene.addEventHandler(MouseEvent.MOUSE_PRESSED, this::handleMousePressed);
-        scene.addEventHandler(MouseEvent.MOUSE_DRAGGED, this::handleMouseDragged);
-        scene.addEventHandler(MouseEvent.MOUSE_RELEASED, this::handleMouseReleased);
+        // Use EventFilters to capture before any child component can consume mouse events
+        scene.addEventFilter(MouseEvent.MOUSE_MOVED, this::handleMouseMoved);
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, this::handleMousePressed);
+        scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, this::handleMouseDragged);
+        scene.addEventFilter(MouseEvent.MOUSE_RELEASED, this::handleMouseReleased);
+
+        // Keyboard window snapping: Win+Left, Win+Right, Win+Up, Win+Down AND Alt+Left/Right/Up/Down
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::handleKeyPressed);
+    }
+
+    private CustomTitleBar getCustomTitleBar() {
+        Object tb = stage.getProperties().get("customTitleBar");
+        if (tb instanceof CustomTitleBar) {
+            return (CustomTitleBar) tb;
+        }
+        return null;
     }
 
     private boolean isWindowMaximized() {
         if (stage.isMaximized()) {
             return true;
         }
-        Object customMax = stage.getProperties().get("customMaximized");
-        if (Boolean.TRUE.equals(customMax)) {
-            return true;
+        CustomTitleBar tb = getCustomTitleBar();
+        if (tb != null) {
+            return tb.isWindowMaximized();
         }
-        Object tb = stage.getProperties().get("customTitleBar");
-        if (tb instanceof CustomTitleBar) {
-            return ((CustomTitleBar) tb).isWindowMaximized();
+        return Boolean.TRUE.equals(stage.getProperties().get("customMaximized"));
+    }
+
+    private void handleKeyPressed(KeyEvent event) {
+        boolean winOrMeta = event.isMetaDown();
+        boolean alt = event.isAltDown();
+        boolean ctrl = event.isControlDown();
+
+        // Support Win+Arrow and Alt+Arrow (without Ctrl)
+        if (winOrMeta || (alt && !ctrl)) {
+            CustomTitleBar tb = getCustomTitleBar();
+            if (tb != null) {
+                if (event.getCode() == KeyCode.LEFT) {
+                    tb.snapLeft();
+                    event.consume();
+                } else if (event.getCode() == KeyCode.RIGHT) {
+                    tb.snapRight();
+                    event.consume();
+                } else if (event.getCode() == KeyCode.UP) {
+                    tb.maximizeWindow();
+                    event.consume();
+                } else if (event.getCode() == KeyCode.DOWN) {
+                    tb.restoreWindow();
+                    event.consume();
+                }
+            }
         }
-        return false;
     }
 
     private void handleMouseMoved(MouseEvent t) {
-        if (isResizing || isWindowMaximized()) {
-            Scene scene = stage.getScene();
-            if (scene != null && cursorEvent != Cursor.DEFAULT) {
+        if (isResizing) {
+            return;
+        }
+
+        if (isWindowMaximized()) {
+            if (cursorEvent != Cursor.DEFAULT) {
                 cursorEvent = Cursor.DEFAULT;
-                scene.setCursor(Cursor.DEFAULT);
+                Scene scene = stage.getScene();
+                if (scene != null) {
+                    scene.setCursor(Cursor.DEFAULT);
+                }
             }
             return;
         }
 
         Scene scene = stage.getScene();
+        if (scene == null) return;
+
         double mouseX = t.getSceneX();
         double mouseY = t.getSceneY();
         double sceneW = scene.getWidth();
         double sceneH = scene.getHeight();
 
-        boolean left = mouseX < borderSize;
-        boolean right = mouseX > sceneW - borderSize;
-        boolean top = mouseY < borderSize;
-        boolean bottom = mouseY > sceneH - borderSize;
+        boolean left = mouseX <= borderSize;
+        boolean right = mouseX >= sceneW - borderSize;
+        boolean top = mouseY <= borderSize;
+        boolean bottom = mouseY >= sceneH - borderSize;
 
         if (top && left) {
             cursorEvent = Cursor.NW_RESIZE;
@@ -109,6 +152,7 @@ public class WindowResizeHelper {
     private void handleMousePressed(MouseEvent t) {
         if (cursorEvent != Cursor.DEFAULT && !isWindowMaximized()) {
             isResizing = true;
+            t.consume();
             startScreenX = t.getScreenX();
             startScreenY = t.getScreenY();
             startStageX = stage.getX();
@@ -122,38 +166,45 @@ public class WindowResizeHelper {
         if (!isResizing) {
             return;
         }
+        t.consume();
 
         double deltaX = t.getScreenX() - startScreenX;
         double deltaY = t.getScreenY() - startScreenY;
 
+        // East (Right border)
         if (cursorEvent == Cursor.E_RESIZE || cursorEvent == Cursor.NE_RESIZE || cursorEvent == Cursor.SE_RESIZE) {
             double newW = Math.max(minWidth, startStageW + deltaX);
             stage.setWidth(newW);
         }
+
+        // South (Bottom border)
         if (cursorEvent == Cursor.S_RESIZE || cursorEvent == Cursor.SE_RESIZE || cursorEvent == Cursor.SW_RESIZE) {
             double newH = Math.max(minHeight, startStageH + deltaY);
             stage.setHeight(newH);
         }
+
+        // West (Left border) - keep right edge pinned
         if (cursorEvent == Cursor.W_RESIZE || cursorEvent == Cursor.NW_RESIZE || cursorEvent == Cursor.SW_RESIZE) {
             double newW = Math.max(minWidth, startStageW - deltaX);
-            if (newW > minWidth) {
-                stage.setX(startStageX + deltaX);
-                stage.setWidth(newW);
-            }
+            stage.setX(startStageX + (startStageW - newW));
+            stage.setWidth(newW);
         }
+
+        // North (Top border) - keep bottom edge pinned
         if (cursorEvent == Cursor.N_RESIZE || cursorEvent == Cursor.NW_RESIZE || cursorEvent == Cursor.NE_RESIZE) {
             double newH = Math.max(minHeight, startStageH - deltaY);
-            if (newH > minHeight) {
-                stage.setY(startStageY + deltaY);
-                stage.setHeight(newH);
-            }
+            stage.setY(startStageY + (startStageH - newH));
+            stage.setHeight(newH);
         }
     }
 
     private void handleMouseReleased(MouseEvent t) {
-        isResizing = false;
-        if (stage.getScene() != null) {
-            stage.getScene().setCursor(Cursor.DEFAULT);
+        if (isResizing) {
+            isResizing = false;
+            t.consume();
+            if (stage.getScene() != null) {
+                stage.getScene().setCursor(Cursor.DEFAULT);
+            }
         }
     }
 }

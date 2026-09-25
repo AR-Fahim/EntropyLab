@@ -105,7 +105,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
 
         // Enable edge resizing for undecorated window
-        com.entropylab.ui.WindowResizeHelper.install(primaryStage, 6, 850, 550);
+        com.entropylab.ui.WindowResizeHelper.install(primaryStage, 10, 850, 550);
 
         primaryStage.show();
     }
