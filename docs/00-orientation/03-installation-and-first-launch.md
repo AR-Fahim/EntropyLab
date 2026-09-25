@@ -11,22 +11,25 @@ EntropyLab is distributed as a self-contained desktop application. Setting it up
 
 Follow these steps to install EntropyLab on your Windows machine:
 
-1. **Download the Installer**: Download the latest installer package (`EntropyLab-Setup.exe` or `.msi`) from the official release repository.
-2. **Launch the Installer**: Double-click the downloaded setup file. If Windows SmartScreen displays an unrecognized app prompt, click **More info** and select **Run anyway**.
+1. **Download the Installer**: Download the latest installer package (`EntropyLab-1.0.0.msi` or `.exe`) from the official release repository.
+2. **Launch the Installer**: Double-click the downloaded setup file (`EntropyLab-1.0.0.msi`). If Windows SmartScreen displays an unrecognized app prompt on new builds, click **More info** and select **Run anyway**.
 3. **Follow the Setup Wizard**: 
-   - Accept the default destination folder or choose a custom install location.
-   - Choose whether to create a desktop shortcut.
-   - Click **Install** to complete the installation.
-4. **Launch EntropyLab**: Click **Finish** with the launch checkbox selected, or search for **EntropyLab** in your Windows Start Menu and press **Enter**.
+   - **Welcome**: The installer greets you with the EntropyLab version information. Click **Next**.
+   - **Destination Folder**: By default, EntropyLab installs to `C:\Program Files\EntropyLab\`. Click **Change...** (or **Browse...**) if you want to select a custom installation directory or drive. Click **Next**.
+   - **Shortcut Options**: Choose whether to install a desktop shortcut and a Start Menu program group. Click **Next**.
+   - **Ready to Install**: Click **Install** to begin the installation (accept the standard Windows UAC administrator prompt).
+4. **Finish and Launch**: Click **Finish** to close the setup wizard. Launch **EntropyLab** via the desktop icon or search for **EntropyLab** in your Windows Start Menu.
 
 ### Installation Steps at a Glance
 
 | Step | Action | Expected Result |
 |---|---|---|
-| **1. Download** | Save `EntropyLab-Setup.exe` locally | Installer binary downloaded |
-| **2. Run** | Double-click the installer file | Setup wizard opens |
-| **3. Configure** | Confirm destination directory and click **Install** | Files extracted and registered |
-| **4. Launch** | Open via Start Menu or Desktop shortcut | EntropyLab main window appears |
+| **1. Download** | Save `EntropyLab-1.0.0.msi` locally | Windows Installer package downloaded |
+| **2. Run** | Double-click `EntropyLab-1.0.0.msi` | Setup wizard opens with EntropyLab branding |
+| **3. Choose Destination** | Accept default or click **Change...** to select custom path | Target installation path confirmed |
+| **4. Shortcuts** | Select Desktop / Start Menu shortcut options | Shortcut preferences saved |
+| **5. Install & Finish** | Click **Install** then **Finish** | App and bundled JRE deployed to destination |
+| **6. Launch** | Open via Start Menu or Desktop shortcut | EntropyLab main window appears |
 
 ## The Application at First Launch
 

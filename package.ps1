@@ -1,3 +1,7 @@
+param(
+    [string]$PackageType = "msi"
+)
+
 $ErrorActionPreference = "Stop"
 
 # 1. Ensure WiX tools are on PATH
@@ -25,24 +29,26 @@ Copy-Item "target/libs/*.jar" $packageInput
 Copy-Item "target/entropylab-1.0.0-SNAPSHOT.jar" $packageInput
 Copy-Item "target/libs/*-win.jar" $javafxMods
 
-# 4. Determine package type (exe installer if WiX available, otherwise app-image)
-$packageType = "exe"
+# 4. Check WiX availability
 if (!(Get-Command candle.exe -ErrorAction SilentlyContinue)) {
     Write-Warning "WiX not found on PATH. Falling back to app-image."
-    $packageType = "app-image"
+    $PackageType = "app-image"
 }
 
 $destDir = "target/installer"
 if (Test-Path $destDir) { Remove-Item -Recurse -Force $destDir }
 New-Item -ItemType Directory -Force $destDir | Out-Null
 
-Write-Host "Running jpackage (type=$packageType)..."
+$iconPath = "src/main/resources/com/entropylab/branding/EntropyLab.ico"
+
+Write-Host "Running jpackage (type=$PackageType)..."
 $jpackageArgs = @(
-    "--type", $packageType,
+    "--type", $PackageType,
     "--dest", $destDir,
     "--name", "EntropyLab",
     "--app-version", "1.0.0",
     "--vendor", "Abdur Rahman",
+    "--description", "EntropyLab - Reverse Proxy & Chaos Engineering Lab",
     "--input", $packageInput,
     "--main-jar", "entropylab-1.0.0-SNAPSHOT.jar",
     "--main-class", "com.entropylab.Main",
@@ -50,11 +56,18 @@ $jpackageArgs = @(
     "--add-modules", "javafx.controls,jdk.httpserver,java.net.http,java.sql,java.desktop,java.naming,jdk.unsupported,java.xml"
 )
 
-if ($packageType -eq "exe" -or $packageType -eq "msi") {
+if (Test-Path $iconPath) {
+    $jpackageArgs += @("--icon", $iconPath)
+}
+
+if ($PackageType -eq "exe" -or $PackageType -eq "msi") {
     $jpackageArgs += @(
         "--win-menu",
+        "--win-menu-group", "EntropyLab",
         "--win-shortcut",
-        "--win-dir-chooser"
+        "--win-shortcut-prompt",
+        "--win-dir-chooser",
+        "--win-upgrade-uuid", "3f98c4c2-9b2e-4e89-a291-76a08696ecde"
     )
 }
 
