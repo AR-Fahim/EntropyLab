@@ -169,16 +169,20 @@ public class AboutView extends ScrollPane {
         socialRow.setAlignment(Pos.CENTER_LEFT);
         socialRow.setPadding(new Insets(4, 0, 0, 0));
 
-        String githubUrl = EnvUtil.get("DEVELOPER_GITHUB", "https://github.com/");
-        if (githubUrl != null && !githubUrl.isBlank()) {
+        String githubUrl = EnvUtil.get("DEVELOPER_GITHUB", "https://github.com/AR-Fahim");
+        if (githubUrl != null && !githubUrl.isBlank()
+                && !githubUrl.trim().equalsIgnoreCase("https://github.com/")
+                && !githubUrl.trim().equalsIgnoreCase("https://github.com")) {
             Button githubBtn = new Button("GitHub Profile");
             githubBtn.setStyle("-fx-font-size: 11px; -fx-padding: 4px 10px;");
             githubBtn.setOnAction(e -> openUrl(githubUrl));
             socialRow.getChildren().add(githubBtn);
         }
 
-        String linkedinUrl = EnvUtil.get("DEVELOPER_LINKEDIN", "https://linkedin.com/in/");
-        if (linkedinUrl != null && !linkedinUrl.isBlank()) {
+        String linkedinUrl = EnvUtil.get("DEVELOPER_LINKEDIN", null);
+        if (linkedinUrl != null && !linkedinUrl.isBlank()
+                && !linkedinUrl.trim().equalsIgnoreCase("https://linkedin.com/in/")
+                && !linkedinUrl.trim().equalsIgnoreCase("https://linkedin.com/in")) {
             Button linkedinBtn = new Button("LinkedIn Profile");
             linkedinBtn.setStyle("-fx-font-size: 11px; -fx-padding: 4px 10px;");
             linkedinBtn.setOnAction(e -> openUrl(linkedinUrl));
@@ -186,7 +190,9 @@ public class AboutView extends ScrollPane {
         }
 
         String twitterUrl = EnvUtil.get("DEVELOPER_TWITTER", null);
-        if (twitterUrl != null && !twitterUrl.isBlank()) {
+        if (twitterUrl != null && !twitterUrl.isBlank()
+                && !twitterUrl.trim().equalsIgnoreCase("https://x.com/")
+                && !twitterUrl.trim().equalsIgnoreCase("https://x.com")) {
             Button twitterBtn = new Button("Twitter / X");
             twitterBtn.setStyle("-fx-font-size: 11px; -fx-padding: 4px 10px;");
             twitterBtn.setOnAction(e -> openUrl(twitterUrl));
