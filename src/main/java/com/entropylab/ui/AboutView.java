@@ -118,16 +118,6 @@ public class AboutView extends ScrollPane {
 
         actionRow.getChildren().add(docsBtn);
 
-        Path localDocs = findLocalDocs();
-        if (localDocs != null) {
-            Button localDocsBtn = new Button("Open Local Docs");
-            localDocsBtn.setId("aboutLocalDocsButton");
-            localDocsBtn.getStyleClass().addAll("btn", "btn-secondary");
-            localDocsBtn.setTooltip(new Tooltip("Open local documentation files on this computer"));
-            localDocsBtn.setOnAction(e -> openLocalPath(localDocs));
-            actionRow.getChildren().add(localDocsBtn);
-        }
-
         card.getChildren().addAll(headerRow, appIntro, actionRow);
         return card;
     }
@@ -393,38 +383,6 @@ public class AboutView extends ScrollPane {
             }
         }
         openUrl(docsUrl);
-    }
-
-    private Path findLocalDocs() {
-        Path[] candidates = {
-                Paths.get("docs", "00-MANUAL-INDEX.md"),
-                Paths.get("docs"),
-                Paths.get(".").toAbsolutePath().resolve("docs").resolve("00-MANUAL-INDEX.md"),
-                AppPaths.getAppDataDir().resolve("docs").resolve("00-MANUAL-INDEX.md")
-        };
-        for (Path p : candidates) {
-            if (Files.exists(p)) {
-                return p.toAbsolutePath();
-            }
-        }
-        return null;
-    }
-
-    private void openLocalPath(Path path) {
-        if (path == null) {
-            return;
-        }
-        new Thread(() -> {
-            try {
-                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
-                    Desktop.getDesktop().open(path.toFile());
-                } else {
-                    new ProcessBuilder("cmd", "/c", "start", "", path.toString()).start();
-                }
-            } catch (Exception e) {
-                System.err.println("Failed to open local path " + path + ": " + e.getMessage());
-            }
-        }).start();
     }
 
     private void openUrl(String url) {
