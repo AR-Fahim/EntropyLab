@@ -10,11 +10,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.SVGPath;
 
 import java.awt.Desktop;
 import java.io.InputStream;
@@ -96,7 +99,36 @@ public class AboutView extends ScrollPane {
         appIntro.setWrapText(true);
         appIntro.setStyle("-fx-line-spacing: 3px;");
 
-        card.getChildren().addAll(headerRow, appIntro);
+        HBox actionRow = new HBox(12);
+        actionRow.setAlignment(Pos.CENTER_LEFT);
+        actionRow.setPadding(new Insets(6, 0, 0, 0));
+
+        Button docsBtn = new Button("View Documentation");
+        docsBtn.setId("aboutDocsButton");
+        docsBtn.getStyleClass().addAll("btn", "btn-primary");
+        docsBtn.setTooltip(new Tooltip("Open online user manual and guides on GitHub"));
+
+        SVGPath docIcon = new SVGPath();
+        docIcon.setContent("M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z");
+        docIcon.setFill(Color.WHITE);
+        docIcon.setScaleX(0.7);
+        docIcon.setScaleY(0.7);
+        docsBtn.setGraphic(docIcon);
+        docsBtn.setOnAction(e -> openDocumentation());
+
+        actionRow.getChildren().add(docsBtn);
+
+        Path localDocs = findLocalDocs();
+        if (localDocs != null) {
+            Button localDocsBtn = new Button("Open Local Docs");
+            localDocsBtn.setId("aboutLocalDocsButton");
+            localDocsBtn.getStyleClass().addAll("btn", "btn-secondary");
+            localDocsBtn.setTooltip(new Tooltip("Open local documentation files on this computer"));
+            localDocsBtn.setOnAction(e -> openLocalPath(localDocs));
+            actionRow.getChildren().add(localDocsBtn);
+        }
+
+        card.getChildren().addAll(headerRow, appIntro, actionRow);
         return card;
     }
 
@@ -197,7 +229,20 @@ public class AboutView extends ScrollPane {
                 createStepRow("7", "Toggle Light/Dark Mode Anytime", "Use the day-night icon in the top title bar to match your preferred environment.")
         );
 
-        card.getChildren().addAll(title, stepsBox);
+        HBox docsFooterRow = new HBox(12);
+        docsFooterRow.setAlignment(Pos.CENTER_LEFT);
+        docsFooterRow.setPadding(new Insets(6, 0, 0, 0));
+
+        Label docsFooterLabel = new Label("Need step-by-step recipes, test patterns, or troubleshooting?");
+        docsFooterLabel.getStyleClass().add("secondary");
+
+        Button exploreDocsBtn = new Button("Explore User Manual");
+        exploreDocsBtn.getStyleClass().addAll("btn", "btn-secondary");
+        exploreDocsBtn.setOnAction(e -> openDocumentation());
+
+        docsFooterRow.getChildren().addAll(docsFooterLabel, exploreDocsBtn);
+
+        card.getChildren().addAll(title, stepsBox, docsFooterRow);
         return card;
     }
 
@@ -334,6 +379,52 @@ public class AboutView extends ScrollPane {
         } catch (Exception ignored) {
         }
         return null;
+    }
+
+    private void openDocumentation() {
+        String docsUrl = EnvUtil.get("APP_DOCS_URL");
+        if (docsUrl == null || docsUrl.isBlank()) {
+            String repoUrl = EnvUtil.get("GITHUB_REPO_URL");
+            if (repoUrl != null && !repoUrl.isBlank()) {
+                docsUrl = repoUrl.replaceAll("/+$", "") + "/blob/main/docs/00-MANUAL-INDEX.md";
+            } else {
+                String devGithub = EnvUtil.get("DEVELOPER_GITHUB", "https://github.com/AR-Fahim");
+                docsUrl = devGithub.replaceAll("/+$", "") + "/EntropyLab/blob/main/docs/00-MANUAL-INDEX.md";
+            }
+        }
+        openUrl(docsUrl);
+    }
+
+    private Path findLocalDocs() {
+        Path[] candidates = {
+                Paths.get("docs", "00-MANUAL-INDEX.md"),
+                Paths.get("docs"),
+                Paths.get(".").toAbsolutePath().resolve("docs").resolve("00-MANUAL-INDEX.md"),
+                AppPaths.getAppDataDir().resolve("docs").resolve("00-MANUAL-INDEX.md")
+        };
+        for (Path p : candidates) {
+            if (Files.exists(p)) {
+                return p.toAbsolutePath();
+            }
+        }
+        return null;
+    }
+
+    private void openLocalPath(Path path) {
+        if (path == null) {
+            return;
+        }
+        new Thread(() -> {
+            try {
+                if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
+                    Desktop.getDesktop().open(path.toFile());
+                } else {
+                    new ProcessBuilder("cmd", "/c", "start", "", path.toString()).start();
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to open local path " + path + ": " + e.getMessage());
+            }
+        }).start();
     }
 
     private void openUrl(String url) {
