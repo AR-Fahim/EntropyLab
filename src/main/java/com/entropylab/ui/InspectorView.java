@@ -146,11 +146,11 @@ public class InspectorView extends VBox {
         tableView.getColumns().addAll(timeCol, methodCol, pathCol, statusCol, durationCol, typeCol);
         VBox.setVgrow(tableView, Priority.ALWAYS);
 
-        // Row click to open detail view
+        // Double-click row to open detail view
         tableView.setRowFactory(tv -> {
             TableRow<RequestLogEntry> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
+                if (event.getClickCount() == 2 && !row.isEmpty() && event.getButton() == MouseButton.PRIMARY) {
                     showDetailDialog(row.getItem());
                 }
             });
