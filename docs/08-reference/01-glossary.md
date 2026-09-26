@@ -25,6 +25,10 @@ A chaos engine failure mode that abruptly severs the underlying TCP network sock
 A toggle switch present in Routes, Mocks, and Chaos configurations that activates or deactivates that specific feature live in real time. Disabling a route causes it to return a 404 response; disabling a mock allows matching traffic to fall through to standard route forwarding.  
 *See full reference:* [Understanding & Managing Routes](../01-proxy-and-routes/01-understanding-and-managing-routes.md) | [Managing Mocks](../04-mocking/02-managing-mocks-and-auto-mock-details.md)
 
+### Error Rate
+The percentage of all recorded HTTP requests in EntropyLab's database that resulted in an HTTP error status code (`400`+) or an intentional, simulated chaos failure (`CHAOS_STATUS` or `CHAOS_RESET`). Displayed in the Analytics tab and highlighted in red whenever errors are present.  
+*See full reference:* [Analytics Dashboard: Aggregated Metrics & Fault Distribution](../03-inspector/03-analytics-dashboard.md)
+
 ### Failure %
 The probabilistic percentage chance (`0`% to `100`%) that an individual incoming request will trigger an active Status Code Override. It operates as an independent random roll on each request rather than a sequential counter ("fail every Nth request").  
 *See full reference:* [Status Code Override Reference](../02-chaos-engine/03-status-code-override.md)
@@ -58,6 +62,18 @@ A proxy architecture (used by tools like Charles Proxy and mitmproxy) that trans
 ### Mock / Mock Mapping
 A configuration rule that intercepts an incoming HTTP request and immediately returns a saved `.json` file from local disk with an HTTP 200 status, without contacting any external network. Mocks evaluate before routes and require an exact path match.  
 *See full reference:* [Manual Static Mocking](../04-mocking/01-manual-static-mocking.md)
+
+### Mutation Intensity
+The configuration setting controlling how many characters are randomly corrupted per response when Payload Mutation is enabled. Specifies the exact number of characters randomly replaced with printable ASCII characters in a successfully forwarded response body.  
+*See full reference:* [Payload Mutation: Testing Malformed JSON & Corrupted Data](../02-chaos-engine/06-payload-mutation.md)
+
+### Payload Mutation
+A chaos engine failure mode that randomly corrupts characters in a real upstream HTTP response body after it returns successfully from the target API, testing client application resilience against malformed JSON, deserialization crashes, and data corruption.  
+*See full reference:* [Payload Mutation: Testing Malformed JSON & Corrupted Data](../02-chaos-engine/06-payload-mutation.md)
+
+### Percentile Response Time (p50/p95)
+Statistical latency distribution metrics that represent user experience more accurately than averages. The **p50 (median)** response time indicates that 50% of requests completed faster than this duration, while the **p95** response time indicates that 95% of requests completed faster (capturing tail latency and worst-case performance).  
+*See full reference:* [Analytics Dashboard: Aggregated Metrics & Fault Distribution](../03-inspector/03-analytics-dashboard.md)
 
 ### Port / Port Binding
 The local TCP network port (default `8080`, valid range `1`–`65535`) where EntropyLab binds its internal HTTP server. Applications send their requests to `http://localhost:<port>/<path>`. Changing ports requires stopping and restarting the proxy engine.  
