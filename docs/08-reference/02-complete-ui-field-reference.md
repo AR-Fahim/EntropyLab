@@ -69,6 +69,8 @@ This reference provides exhaustive tabular specifications for every interactive 
 | **Failure %** | Spinner / Number | Integer: `0` to `100` (step: `5`) | `0` | Independent probability per request that Status Override triggers. | [Status Code Override Reference](../02-chaos-engine/03-status-code-override.md#field-by-field-reference) |
 | **Enable Connection Reset** | Checkbox | `true` (checked), `false` (unchecked) | `false` | Activates abrupt TCP connection severance. | [Connection Reset Reference](../02-chaos-engine/04-connection-reset.md#field-by-field-reference) |
 | **Reset %** | Spinner / Number | Integer: `0` to `100` (step: `5`) | `0` | Independent probability per request that TCP socket is severed. | [Connection Reset Reference](../02-chaos-engine/04-connection-reset.md#field-by-field-reference) |
+| **Enable Mutation** | Checkbox | `true` (checked), `false` (unchecked) | `false` | Activates random ASCII character corruption on successfully forwarded response bodies. | [Payload Mutation Reference](../02-chaos-engine/06-payload-mutation.md#field-by-field-reference) |
+| **Mutation Intensity** | Spinner / Number | Integer: `1` to `1000` (step: `1`) | `5` | Exact number of random character substitutions applied per response when mutation is enabled. | [Payload Mutation Reference](../02-chaos-engine/06-payload-mutation.md#field-by-field-reference) |
 | **Sub-path filter (optional)** | Text Field | Path string (e.g., `/checkout`, `/users`) | Blank | Scopes all active chaos rules on this route strictly to this sub-path. | [Sub-Path Filtering Reference](../02-chaos-engine/05-sub-path-filtering-and-combining-rules.md#field-by-field-reference) |
 | **OK** | Button | Action trigger | Active | Validates and commits all chaos settings for the route to `config.json`. | [Sub-Path Filtering Reference](../02-chaos-engine/05-sub-path-filtering-and-combining-rules.md) |
 | **Cancel** | Button | Action trigger | Active | Discards changes and closes dialog. | [Sub-Path Filtering Reference](../02-chaos-engine/05-sub-path-filtering-and-combining-rules.md) |
@@ -122,6 +124,22 @@ This reference provides exhaustive tabular specifications for every interactive 
 | **Selected File Label**| Display Label | Absolute filesystem path | "No file selected" | Displays current file selection from FileChooser. | [Manual Static Mocking](../04-mocking/01-manual-static-mocking.md#field-by-field-reference) |
 | **Add** | Button | Action trigger | Active | Validates inputs, saves mock to `config.json`, and adds row to table. | [Manual Static Mocking](../04-mocking/01-manual-static-mocking.md#field-by-field-reference) |
 | **Cancel** | Button | Action trigger | Active | Closes modal without saving changes. | [Manual Static Mocking](../04-mocking/01-manual-static-mocking.md) |
+
+---
+
+## 7. Analytics Tab
+
+### Analytics Tab
+
+| Name | Type | Valid Values / Range | Default Value | One-Line Description | Reference Link |
+|---|---|---|---|---|---|
+| **Refresh** | Button | Action trigger | Active | Manually re-queries SQLite database and recalculates all metrics and chart buckets. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#analytics-overview) |
+| **Total Requests** | Read-only Display Metric (KPI Card) | Non-negative integer (e.g., `1,248`) | `"0"` | Total volume of requests logged across the entire database history. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
+| **Error Rate %** | Read-only Display Metric (KPI Card) | Percentage: `0.0%` to `100.0%` | `"0.0%"` | Ratio of failed requests (status >= 400 or chaos) to total requests; highlighted in red (`#FE0134`) if > 0. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
+| **Average Duration** | Read-only Display Metric (KPI Card) | Millisecond decimal string (e.g., `14.2 ms`) | `"0 ms"` | Arithmetic mean latency computed across all logged requests in the database. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
+| **p50 Duration** | Read-only Display Metric (KPI Card) | Integer milliseconds (e.g., `8 ms`) | `"0 ms"` | 50th percentile (median) duration; 50% of requests completed faster than this time. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
+| **p95 Duration** | Read-only Display Metric (KPI Card) | Integer milliseconds (e.g., `45 ms`) | `"0 ms"` | 95th percentile duration; 95% of requests completed faster than this time (tail latency). | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
+| **Response Status & Traffic Distribution Chart** | BarChart (JavaFX) | X-axis: CategoryAxis (`2xx Success`, `4xx Client Error`, `5xx Server Error`, `CHAOS_STATUS`, `CHAOS_RESET`, `MOCKED`); Y-axis: NumberAxis (`Request Count`) | Empty series | Bar chart breaking down traffic volume by HTTP status classes and chaos failure modes. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#response-status--traffic-distribution-chart) |
 
 ---
 
