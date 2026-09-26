@@ -31,6 +31,7 @@ EntropyLab is engineered as a self-contained, native Windows desktop executable 
 
 | Version | Release Date | Summary of Changes |
 |---|---|---|
+| **v1.1.0** | (update with actual release date) | Added Analytics Dashboard, Payload Mutation, and Mock Edit/Delete actions. |
 | **v1.0.0** | September 2026 | **Initial Public Release:**<br>• Embedded reverse proxy engine on customizable TCP ports (default 8080).<br>• Longest-prefix route mapping with dynamic query string passthrough.<br>• Chaos Engine with Latency Injection (0–60,000 ms), Status Code Overrides (500/503/504 with 0–100% failure probability), and Connection Resets.<br>• Sub-path filtering for targeted, endpoint-specific chaos isolation.<br>• Live Traffic Inspector with real-time streaming, 500-row UI cache, and permanent SQLite persistence.<br>• Request Details modal with 4-panel header and pretty-printed JSON body inspection.<br>• Manual Static Mocking (local `.json` file mapping) and single-click Auto-Mock Snapshots.<br>• System-wide Light and Dark mode toggle with persistent configuration. |
 
 ---
