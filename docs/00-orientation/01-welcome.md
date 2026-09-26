@@ -21,13 +21,15 @@ EntropyLab is **100% local**:
 
 ### Core Capabilities at a Glance
 
-EntropyLab provides five primary capabilities:
+EntropyLab provides seven primary capabilities:
 
 - **Reverse Proxy**: Relays your application's HTTP requests to target APIs, allowing you to intercept, monitor, and manipulate traffic along the way.
 - **Chaos Engine**: Deliberately injects controlled network failures—such as artificial latency delays, HTTP server errors (500, 503, 504), or sudden connection drops—into selected endpoints.
 - **Traffic Inspector**: Displays a live, searchable history of every request and response passing through the proxy, complete with status codes, execution timings, and headers.
 - **Manual Static Mocks**: Instantly serves pre-defined JSON response files for designated paths without contacting external servers.
 - **Auto-Mock Snapshot**: Converts any live API response captured in the Inspector into a permanent local mock file with a single click.
+- **Analytics Dashboard** — an at-a-glance health summary of all your traffic.
+- **Payload Mutation** — corrupt real responses on purpose to stress-test your app's data parsing.
 
 ## Why It Matters / The Problem It Solves
 
