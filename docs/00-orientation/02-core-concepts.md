@@ -58,6 +58,10 @@ EntropyLab organizes its functionality into four core building blocks:
 3. **The Inspector**: The **Inspector** tab displays a live, searchable history of every request and response that passes through EntropyLab. It lets you examine HTTP methods, target paths, execution duration in milliseconds, status codes, and formatted request and response bodies.
 4. **Mocks (Mock Mapping)**: A **mock** is a saved, fake response served instantly to your application instead of contacting the real API. You can create manual mocks by attaching pre-written JSON files, or use the **Auto-Mock Snapshot** feature to capture real live responses directly from the Inspector and save them as permanent local mocks with a single click.
 
+### Also Available
+
+Once you are comfortable with the basics, EntropyLab offers advanced, optional tools to deepen your testing. You can monitor high-level session health and latency percentiles with the [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md), or use [Payload Mutation](../02-chaos-engine/06-payload-mutation.md) to intentionally scramble real response data and stress-test your application's JSON parsers.
+
 ### Complete Lifecycle of a Request
 
 When your application issues a request to EntropyLab, the proxy executes the following sequence:
