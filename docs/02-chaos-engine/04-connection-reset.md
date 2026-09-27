@@ -24,7 +24,7 @@ In simple terms: **A Status Code Override tests how your application handles bad
 
 Connection Reset is configured within the **Edit Chaos Rule** dialog in the **Chaos Rules** tab.
 
-![Screenshot: Edit Chaos Rule dialog for route /github, highlighting the Connection Reset section with Enable Connection Reset checked and Reset % spinner set to 50, with remaining chaos sections disabled](./images/chaos-connection-reset-dialog.png)
+![Screenshot: Edit Chaos Rule dialog for route /github, highlighting the Connection Reset section with Enable Connection Reset checked and Reset % spinner set to 50, with remaining chaos sections disabled](../images/chaos-connection-reset-dialog.png)
 
 The section contains two primary controls:
 1. **Enable Connection Reset**: Checkbox that activates abrupt TCP socket drops.
@@ -42,7 +42,7 @@ Follow these steps to simulate connection resets on a route:
 6. Click **OK** to save the rule.
 7. Verify that the **Chaos Summary** column for that route updates in the **Chaos Rules** table:
    ```text
-   Latency: OFF | Status: OFF | Reset: 50%
+   Latency: OFF | Status: OFF | Reset: 50% | Mutation: OFF
    ```
 
 The rule takes effect immediately with no server restart required.

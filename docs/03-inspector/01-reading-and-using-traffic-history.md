@@ -13,7 +13,7 @@ Whether an exchange was forwarded across the internet, served instantly by a loc
 
 The Inspector interface provides an immediate high-level summary of network activity:
 
-![Screenshot: Inspector tab showing a traffic history table with diverse request types: a 200 GET to /github/users (FORWARDED), a 200 GET to /api/users (MOCKED), a 500 POST to /stripe/checkout (CHAOS_STATUS), and a reset to /orders (CHAOS_RESET)](./images/inspector-traffic-table.png)
+![Screenshot: Inspector tab showing a traffic history table with diverse request types: a 200 GET to /github/users (FORWARDED), a 200 GET to /api/users (MOCKED), a 500 POST to /stripe/checkout (CHAOS_STATUS), and a reset to /orders (CHAOS_RESET)](../images/inspector-traffic-table.png)
 
 The view consists of:
 1. **Action Toolbar**: Houses the **Save as Mock** button (active when a valid row with a response payload is selected).

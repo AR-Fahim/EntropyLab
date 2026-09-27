@@ -27,7 +27,7 @@ Before following this recipe, ensure you understand:
 7. Click **OK** to save the rule.
 8. Verify that the **Chaos Rules** table displays:
    ```text
-   Latency: OFF | Status: OFF | Reset: 100%
+   Latency: OFF | Status: OFF | Reset: 100% | Mutation: OFF
    ```
 9. Open your web browser, terminal, or API testing tool, and make a request to:
     ```text

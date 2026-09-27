@@ -66,7 +66,7 @@ Now, let's stress-test the checkout flow. We will inject a 2,500 ms delay and a 
 6. Click **OK** to save the rule.
 7. Confirm the **Chaos Rules** table displays:
    ```text
-   Latency: 2500ms | Status: 500 (40%) | Reset: OFF
+   Latency: 2500ms | Status: 500 (40%) | Reset: OFF | Mutation: OFF
    ```
 
 ---

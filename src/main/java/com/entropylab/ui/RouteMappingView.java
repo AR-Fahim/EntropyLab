@@ -300,6 +300,10 @@ public class RouteMappingView extends VBox {
             return;
         }
         ConfigManager.getInstance().getConfig().getRouteMappings().remove(mapping);
+        if (ConfigManager.getInstance().getConfig().getChaosRules() != null) {
+            ConfigManager.getInstance().getConfig().getChaosRules()
+                    .removeIf(r -> r.getRouteMappingId() == mapping.getId());
+        }
         routeList.remove(mapping);
         ConfigManager.getInstance().save();
     }

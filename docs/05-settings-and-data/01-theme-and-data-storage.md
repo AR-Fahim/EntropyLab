@@ -13,7 +13,7 @@ Understanding where this data lives makes it simple to inspect raw logs, backup 
 
 EntropyLab features native support for both **Light Mode** and **Dark Mode**.
 
-![Screenshot: EntropyLab running in Dark Mode, showing the top bar theme toggle icon, dark background styling, and contrasting brand red highlights](./images/settings-dark-mode.png)
+![Screenshot: EntropyLab running in Dark Mode, showing the top bar theme toggle icon, dark background styling, and contrasting brand red highlights](../images/settings-dark-mode.png)
 
 ### The Theme Toggle
 

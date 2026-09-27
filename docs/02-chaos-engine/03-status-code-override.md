@@ -19,7 +19,7 @@ This enables you to test how your application responds to third-party outages wi
 
 Status code overrides are configured within the same **Edit Chaos Rule** dialog as Latency Injection, located in the **Chaos Rules** tab.
 
-![Screenshot: Edit Chaos Rule dialog for route /github, highlighting the Status Code Override section with Enable Status Override checked, Status Code dropdown set to 500, and Failure % spinner set to 30](./images/chaos-status-override-dialog.png)
+![Screenshot: Edit Chaos Rule dialog for route /github, highlighting the Status Code Override section with Enable Status Override checked, Status Code dropdown set to 500, and Failure % spinner set to 30](../images/chaos-status-override-dialog.png)
 
 The section contains three interdependent controls:
 1. **Enable Status Override**: Master checkbox to activate failure injection.
@@ -39,7 +39,7 @@ Follow these steps to configure status code overrides on any route:
 7. Click **OK** to save the rule.
 8. Verify that the **Chaos Summary** column in the **Chaos Rules** table updates to reflect your rule, for example:
    ```text
-   Latency: OFF | Status: 500 (50%) | Reset: OFF
+   Latency: OFF | Status: 500 (50%) | Reset: OFF | Mutation: OFF
    ```
 
 The rule takes effect immediately—no proxy restart is needed.

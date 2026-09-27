@@ -35,7 +35,7 @@ Follow these steps to install EntropyLab on your Windows machine:
 
 When you open EntropyLab for the very first time, the main application window appears.
 
-![Screenshot: EntropyLab main window immediately after first launch, showing the default Light theme, the top navigation bar with the dark mode toggle, the brand logo, the seven navigation tabs (Proxy Control, Routes, Chaos Rules, Inspector, Mocks, Analytics, and About), and the Proxy Control tab active displaying port 8080 with a red 'Stopped' status label](./images/first-launch-main-window.png)
+![Screenshot: EntropyLab main window immediately after first launch, showing the default Light theme, the top navigation bar with the dark mode toggle, the brand logo, the seven navigation tabs (Proxy Control, Routes, Chaos Rules, Inspector, Mocks, Analytics, and About), and the Proxy Control tab active displaying port 8080 with a red 'Stopped' status label](../images/first-launch-main-window.png)
 
 ### What Happens Behind the Scenes
 

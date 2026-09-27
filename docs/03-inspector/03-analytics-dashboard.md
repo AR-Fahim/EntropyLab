@@ -15,7 +15,7 @@ While the Inspector tab acts as a detailed transaction log (showing granular, re
 
 The Analytics interface presents two primary functional areas: a top row of KPI metric summary cards and a comprehensive traffic distribution chart.
 
-![Screenshot: Analytics tab displaying KPI summary cards (Total Requests, Error Rate, Avg Duration, p50 Latency, p95 Latency) and the Response Status & Traffic Distribution bar chart](./images/analytics-dashboard.png)
+![Screenshot: Analytics tab displaying KPI summary cards (Total Requests, Error Rate, Avg Duration, p50 Latency, p95 Latency) and the Response Status & Traffic Distribution bar chart](../images/analytics-dashboard.png)
 
 1. **Header & Action Bar**: Contains the page title, a live subtitle, a manual **Refresh** button, and a "Last updated: HH:mm:ss" timestamp.
 2. **KPI Summary Cards**: Five real-time cards highlighting **TOTAL REQUESTS**, **ERROR RATE**, **AVG DURATION**, **P50 LATENCY**, and **P95 LATENCY**.

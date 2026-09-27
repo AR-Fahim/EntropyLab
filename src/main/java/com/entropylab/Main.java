@@ -55,13 +55,21 @@ public class Main extends Application {
         proxyControlTab.setContent(new com.entropylab.ui.ProxyControlView());
         tabPane.getTabs().add(proxyControlTab);
 
+        com.entropylab.ui.RouteMappingView routeMappingView = new com.entropylab.ui.RouteMappingView();
         Tab routesTab = new Tab("Routes");
-        routesTab.setContent(new com.entropylab.ui.RouteMappingView());
+        routesTab.setContent(routeMappingView);
         tabPane.getTabs().add(routesTab);
 
+        com.entropylab.ui.ChaosRulesView chaosRulesView = new com.entropylab.ui.ChaosRulesView(routeMappingView.getRouteList());
         Tab chaosTab = new Tab("Chaos Rules");
-        chaosTab.setContent(new com.entropylab.ui.ChaosRulesView());
+        chaosTab.setContent(chaosRulesView);
         tabPane.getTabs().add(chaosTab);
+
+        chaosTab.setOnSelectionChanged(e -> {
+            if (chaosTab.isSelected()) {
+                chaosRulesView.refresh();
+            }
+        });
 
         com.entropylab.ui.MockManagementView mockManagementView = new com.entropylab.ui.MockManagementView();
         com.entropylab.ui.InspectorView inspectorView = new com.entropylab.ui.InspectorView(mockManagementView);

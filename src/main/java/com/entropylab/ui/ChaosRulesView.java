@@ -36,6 +36,10 @@ public class ChaosRulesView extends VBox {
     private final Button editRuleButton;
 
     public ChaosRulesView() {
+        this(null);
+    }
+
+    public ChaosRulesView(ObservableList<RouteMapping> sharedRouteList) {
         setPadding(new Insets(14, 16, 14, 16));
         setSpacing(10);
 
@@ -48,12 +52,15 @@ public class ChaosRulesView extends VBox {
         toolbar.getStyleClass().add("view-toolbar");
         toolbar.setAlignment(Pos.CENTER_LEFT);
 
-        List<RouteMapping> routes = ConfigManager.getInstance().getConfig() != null
-                && ConfigManager.getInstance().getConfig().getRouteMappings() != null
-                ? ConfigManager.getInstance().getConfig().getRouteMappings()
-                : List.of();
-
-        routeList = FXCollections.observableArrayList(routes);
+        if (sharedRouteList != null) {
+            this.routeList = sharedRouteList;
+        } else {
+            List<RouteMapping> routes = ConfigManager.getInstance().getConfig() != null
+                    && ConfigManager.getInstance().getConfig().getRouteMappings() != null
+                    ? ConfigManager.getInstance().getConfig().getRouteMappings()
+                    : List.of();
+            this.routeList = FXCollections.observableArrayList(routes);
+        }
         tableView = new TableView<>(routeList);
         tableView.setEditable(false);
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -407,6 +414,23 @@ public class ChaosRulesView extends VBox {
 
         ConfigManager.getInstance().save();
         tableView.refresh();
+    }
+
+    public void refresh() {
+        if (ConfigManager.getInstance().getConfig() != null) {
+            List<RouteMapping> currentConfigRoutes = ConfigManager.getInstance().getConfig().getRouteMappings();
+            if (currentConfigRoutes != null && routeList != currentConfigRoutes) {
+                for (RouteMapping r : currentConfigRoutes) {
+                    if (!routeList.contains(r)) {
+                        routeList.add(r);
+                    }
+                }
+                routeList.removeIf(r -> !currentConfigRoutes.contains(r));
+            }
+        }
+        if (tableView != null) {
+            tableView.refresh();
+        }
     }
 
     protected void showDialog(Dialog<?> dialog) {

@@ -11,7 +11,7 @@ A **route** (or route mapping) is the fundamental rule connecting a local URL pa
 
 The **Routes** tab provides a complete management dashboard for defining, updating, and toggling your proxy endpoints.
 
-![Screenshot: Routes tab showing a configured table with three active routes: /github mapped to https://api.github.com, /stripe mapped to https://api.stripe.com, and /weather mapped to https://api.weather.com, with toolbar buttons Add Route, Edit Route, and Delete Route](./images/routes-tab-overview.png)
+![Screenshot: Routes tab showing a configured table with three active routes: /github mapped to https://api.github.com, /stripe mapped to https://api.stripe.com, and /weather mapped to https://api.weather.com, with toolbar buttons Add Route, Edit Route, and Delete Route](../images/routes-tab-overview.png)
 
 The interface consists of:
 1. **Toolbar**: Quick-action buttons (**Add Route**, **Edit Route**, **Delete Route**) positioned above the table.

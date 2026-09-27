@@ -11,7 +11,7 @@ The **Proxy Control** tab is the operational command center for EntropyLab's emb
 
 The **Proxy Control** interface is streamlined and focused on server lifecycle management:
 
-![Screenshot: Proxy Control tab showing the Port field disabled and set to 8080, the primary action button displaying Stop Proxy, and the status label showing Running on port 8080 in bold green text](./images/proxy-control-running.png)
+![Screenshot: Proxy Control tab showing the Port field disabled and set to 8080, the primary action button displaying Stop Proxy, and the status label showing Running on port 8080 in bold green text](../images/proxy-control-running.png)
 
 The tab provides three essential controls:
 1. **Port Field**: A text input specifying the local TCP port where EntropyLab listens for incoming traffic.

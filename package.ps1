@@ -53,7 +53,7 @@ $jpackageArgs = @(
     "--main-jar", "entropylab-1.0.0-SNAPSHOT.jar",
     "--main-class", "com.entropylab.Main",
     "--module-path", $javafxMods,
-    "--add-modules", "javafx.controls,jdk.httpserver,java.net.http,java.sql,java.desktop,java.naming,jdk.unsupported,java.xml"
+    "--add-modules", "javafx.controls,jdk.httpserver,java.net.http,java.sql,java.desktop,java.naming,jdk.unsupported,java.xml,jdk.crypto.ec,jdk.crypto.mscapi"
 )
 
 if (Test-Path $iconPath) {

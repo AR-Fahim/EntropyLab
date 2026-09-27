@@ -13,7 +13,7 @@ Understanding how mocks interact with the rest of EntropyLab—specifically how 
 
 The **Mocks** table summarizes all local response stubs currently configured in the application:
 
-![Screenshot: Mocks tab showing two entries: a manually added mock for /api/users with Auto-Generated No, and an auto-generated mock for /github/users/octocat with Auto-Generated Yes, with Enabled checkboxes checked](./images/mocks-management-table.png)
+![Screenshot: Mocks tab showing two entries: a manually added mock for /api/users with Auto-Generated No, and an auto-generated mock for /github/users/octocat with Auto-Generated Yes, with Enabled checkboxes checked](../images/mocks-management-table.png)
 
 ### The Columns Explained
 

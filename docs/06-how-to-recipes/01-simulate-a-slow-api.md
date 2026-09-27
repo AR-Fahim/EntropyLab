@@ -28,7 +28,7 @@ Before following this recipe, ensure you understand:
 8. Click **OK** to save the chaos rule.
 9. Verify that the **Chaos Rules** table displays:
    ```text
-   Latency: 3000ms | Status: OFF | Reset: OFF
+   Latency: 3000ms | Status: OFF | Reset: OFF | Mutation: OFF
    ```
 10. Open your web browser or API client and send a request to:
     ```text

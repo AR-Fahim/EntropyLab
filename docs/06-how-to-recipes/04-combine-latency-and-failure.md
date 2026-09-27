@@ -31,7 +31,7 @@ Before following this recipe, ensure you understand:
 7. Click **OK** to save both features simultaneously.
 8. Verify that the **Chaos Rules** table displays:
    ```text
-   Latency: 2000ms | Status: 500 (25%) | Reset: OFF
+   Latency: 2000ms | Status: 500 (25%) | Reset: OFF | Mutation: OFF
    ```
 9. Open your web browser or API testing tool, and make 8 to 10 consecutive requests to:
    ```text

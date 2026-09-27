@@ -41,7 +41,7 @@ A route tells EntropyLab where to send traffic when a request arrives. We will c
    *Why this matters:* This is the real internet address where EntropyLab should forward your requests.
 5. Click the **Add** button at the bottom of the dialog.
 
-![Screenshot: Add Route dialog with Local Path populated with /github and Target Base URL populated with https://api.github.com, with the Add button highlighted](./images/quickstart-add-route.png)
+![Screenshot: Add Route dialog with Local Path populated with /github and Target Base URL populated with https://api.github.com, with the Add button highlighted](../images/quickstart-add-route.png)
 
 You will now see a new row in your **Routes** table showing:
 - **Local Path**: `/github`
@@ -63,7 +63,7 @@ Now that EntropyLab knows where to forward `/github` traffic, you need to turn o
    Running on port 8080
    ```
 
-![Screenshot: Proxy Control tab showing port 8080 and the Start Proxy button toggled to Stop Proxy, with the green status label displaying Running on port 8080](./images/quickstart-proxy-running.png)
+![Screenshot: Proxy Control tab showing port 8080 and the Start Proxy button toggled to Stop Proxy, with the green status label displaying Running on port 8080](../images/quickstart-proxy-running.png)
 
 Your proxy is now actively listening for traffic on your machine.
 
@@ -111,7 +111,7 @@ Here is a quick overview of what each column shows:
 - **Duration (ms)**: The total round-trip time in milliseconds it took to contact GitHub and receive the data.
 - **Type**: Displays `FORWARDED`, confirming this request was relayed to a real external server rather than intercepted by a mock or chaos rule.
 
-![Screenshot: Inspector tab showing a single row with Method GET, Path /github/users/octocat, Status 200, and Type FORWARDED](./images/quickstart-inspector-row.png)
+![Screenshot: Inspector tab showing a single row with Method GET, Path /github/users/octocat, Status 200, and Type FORWARDED](../images/quickstart-inspector-row.png)
 
 ---
 

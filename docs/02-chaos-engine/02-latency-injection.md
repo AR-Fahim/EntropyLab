@@ -11,7 +11,7 @@
 
 In EntropyLab, chaos parameters are managed per-route within the **Chaos Rules** tab.
 
-![Screenshot: Edit Chaos Rule dialog for route /github, focusing on the Latency section at the top with Enable Latency checked and the Latency (ms) spinner populated with 2500, with remaining chaos sections disabled](./images/chaos-latency-dialog.png)
+![Screenshot: Edit Chaos Rule dialog for route /github, focusing on the Latency section at the top with Enable Latency checked and the Latency (ms) spinner populated with 2500, with remaining chaos sections disabled](../images/chaos-latency-dialog.png)
 
 When configuring latency for a route:
 1. Open the **Chaos Rules** tab to view your configured routes and their active chaos summaries.
@@ -32,7 +32,7 @@ Follow these steps to apply an artificial delay to any existing route:
 6. Click **OK** to save the rule.
 7. Verify that the **Chaos Rules** table updates its **Chaos Summary** column for that route to display:
    ```text
-   Latency: 2500ms | Status: OFF | Reset: OFF
+   Latency: 2500ms | Status: OFF | Reset: OFF | Mutation: OFF
    ```
 
 The rule is now active immediately. You do not need to restart the proxy.

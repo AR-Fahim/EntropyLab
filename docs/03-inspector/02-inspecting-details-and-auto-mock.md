@@ -13,7 +13,7 @@ Additionally, the Inspector features **Auto-Mock Snapshot**—a single-click wor
 
 Double-clicking any row in the Inspector opens the **Request Details** dialog:
 
-![Screenshot: Request Details modal dialog showing the 4-panel grid with Request Headers, Response Headers, Request Body, and a pretty-printed JSON Response Body for /github/users/octocat](./images/inspector-request-details.png)
+![Screenshot: Request Details modal dialog showing the 4-panel grid with Request Headers, Response Headers, Request Body, and a pretty-printed JSON Response Body for /github/users/octocat](../images/inspector-request-details.png)
 
 The dialog displays a balanced four-panel layout:
 1. **Request Headers**: Metadata headers sent by your client application (e.g., `User-Agent`, `Accept`, custom auth tokens).

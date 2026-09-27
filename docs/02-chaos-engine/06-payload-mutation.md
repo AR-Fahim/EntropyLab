@@ -19,7 +19,7 @@ This feature reveals critical vulnerabilities that traditional error-code testin
 
 Payload mutation settings are managed alongside other chaos features in the per-route **Edit Chaos Rule** dialog.
 
-![Screenshot: Edit Chaos Rule dialog for route /github, showing the bottom Payload Mutation section with Enable Payload Mutation checked and Mutation Intensity spinner set to 5](./images/chaos-payload-mutation-dialog.png)
+![Screenshot: Edit Chaos Rule dialog for route /github, showing the bottom Payload Mutation section with Enable Payload Mutation checked and Mutation Intensity spinner set to 5](../images/chaos-payload-mutation-dialog.png)
 
 When configuring payload mutation:
 1. Navigate to the **Chaos Rules** tab to inspect all configured route mappings.

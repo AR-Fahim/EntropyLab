@@ -32,7 +32,7 @@ Before following this recipe, ensure you understand:
 8. Click **OK** to save the rule.
 9. Verify that the **Chaos Rules** table displays:
    ```text
-   Latency: OFF | Status: 503 (30%) | Reset: OFF
+   Latency: OFF | Status: 503 (30%) | Reset: OFF | Mutation: OFF
    ```
 10. Open your web browser, terminal, or API testing tool, and make 10 consecutive requests in quick succession to:
     ```text

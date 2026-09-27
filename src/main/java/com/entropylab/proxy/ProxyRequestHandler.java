@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLParameters;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,12 +30,38 @@ import java.util.Set;
 
 public class ProxyRequestHandler implements HttpHandler {
 
-    private static final HttpClient httpClient = HttpClient.newHttpClient();
+    private static final HttpClient httpClient;
+
+    static {
+        HttpClient client;
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, null, null);
+            SSLParameters sslParameters = new SSLParameters();
+            sslParameters.setProtocols(new String[]{"TLSv1.3", "TLSv1.2"});
+
+            client = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .sslContext(sslContext)
+                    .sslParameters(sslParameters)
+                    .followRedirects(HttpClient.Redirect.NORMAL)
+                    .build();
+        } catch (Exception e) {
+            client = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .followRedirects(HttpClient.Redirect.NORMAL)
+                    .build();
+        }
+        httpClient = client;
+    }
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private final RequestLogDAO logDao = new RequestLogDAO();
 
     private static final Set<String> DISALLOWED_HEADERS = Set.of(
-            "host", "content-length", "connection", "transfer-encoding", "expect", "upgrade", "accept-encoding"
+            "host", "content-length", "connection", "transfer-encoding", "expect", "upgrade",
+            "accept-encoding", "http2-settings", "proxy-connection", "keep-alive", "te",
+            "proxy-authenticate", "proxy-authorization"
     );
 
     @Override
@@ -127,16 +155,68 @@ public class ProxyRequestHandler implements HttpHandler {
             }
         }
 
+        String method = exchange.getRequestMethod();
         if (bestMatch == null) {
             byte[] response = "No route configured for this path".getBytes(StandardCharsets.UTF_8);
-            exchange.sendResponseHeaders(404, response.length);
-            try (OutputStream os = exchange.getResponseBody()) {
-                os.write(response);
+            try {
+                exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=utf-8");
+                exchange.sendResponseHeaders(404, response.length);
+                try (OutputStream os = exchange.getResponseBody()) {
+                    os.write(response);
+                }
+            } catch (IOException ignored) {
+            } finally {
+                exchange.close();
+            }
+
+            try {
+                long durationMs = System.currentTimeMillis() - startTime;
+                RequestLogEntry entry = new RequestLogEntry();
+                entry.setTimestamp(startTime);
+                entry.setDurationMs(durationMs);
+                entry.setMethod(method);
+                entry.setPath(incomingPath);
+                entry.setTargetUrl(null);
+                entry.setStatusCode(404);
+                entry.setRequestHeaders(objectMapper.writeValueAsString(exchange.getRequestHeaders()));
+                entry.setResponseHeaders("{\"Content-Type\":[\"text/plain; charset=utf-8\"]}");
+                entry.setRequestBody("");
+                entry.setResponseBody("No route configured for this path");
+                entry.setType("FORWARDED");
+
+                logDao.insertAsync(entry, saved -> LogEventBus.getInstance().publish(saved));
+            } catch (Exception ignored) {
             }
             return;
         }
 
+        String targetUri = null;
+        byte[] bodyBytes = new byte[0];
+
         try {
+            // Read request body once
+            try (InputStream is = exchange.getRequestBody()) {
+                bodyBytes = is.readAllBytes();
+            } catch (Exception ignored) {
+            }
+
+            // 1. Remainder path computation
+            String normalizedLocal = PathUtil.normalize(bestMatch.getLocalPath());
+            String remainderPath = incomingPath.substring(normalizedLocal.length());
+            if (remainderPath.isEmpty()) {
+                remainderPath = "/";
+            } else if (!remainderPath.startsWith("/")) {
+                remainderPath = "/" + remainderPath;
+            }
+
+            // 2. Target URI construction
+            String targetBase = bestMatch.getTargetBaseUrl() != null ? bestMatch.getTargetBaseUrl() : "";
+            while (targetBase.length() > 1 && targetBase.endsWith("/")) {
+                targetBase = targetBase.substring(0, targetBase.length() - 1);
+            }
+            String rawQuery = exchange.getRequestURI().getRawQuery();
+            targetUri = targetBase + remainderPath + (rawQuery != null && !rawQuery.isEmpty() ? "?" + rawQuery : "");
+
             // Look up ChaosRule for matched route
             ChaosRule chaosRule = null;
             List<ChaosRule> chaosRules = ConfigManager.getInstance().getConfig().getChaosRules();
@@ -157,7 +237,6 @@ public class ProxyRequestHandler implements HttpHandler {
             if (chaosRule != null && chaosRule.isConnectionResetEnabled()
                     && matchesSubPathFilter(chaosRule, bestMatch, incomingPath)
                     && (Math.random() * 100 < chaosRule.getResetPercentage())) {
-                String method = exchange.getRequestMethod();
                 String reqHeadersJson = "{}";
                 try {
                     reqHeadersJson = objectMapper.writeValueAsString(exchange.getRequestHeaders());
@@ -175,11 +254,11 @@ public class ProxyRequestHandler implements HttpHandler {
                     entry.setDurationMs(durationMs);
                     entry.setMethod(method);
                     entry.setPath(incomingPath);
-                    entry.setTargetUrl(null);
+                    entry.setTargetUrl(targetUri);
                     entry.setStatusCode(0);
                     entry.setRequestHeaders(reqHeadersJson);
                     entry.setResponseHeaders("{}");
-                    entry.setRequestBody("");
+                    entry.setRequestBody(new String(bodyBytes, StandardCharsets.UTF_8));
                     entry.setResponseBody("");
                     entry.setType("CHAOS_RESET");
 
@@ -193,12 +272,6 @@ public class ProxyRequestHandler implements HttpHandler {
             if (chaosRule != null && chaosRule.isStatusOverrideEnabled()
                     && matchesSubPathFilter(chaosRule, bestMatch, incomingPath)
                     && (Math.random() * 100 < chaosRule.getFailurePercentage())) {
-                String method = exchange.getRequestMethod();
-                byte[] bodyBytes;
-                try (InputStream is = exchange.getRequestBody()) {
-                    bodyBytes = is.readAllBytes();
-                }
-
                 int statusCode = chaosRule.getStatusCode();
                 String responseJson = "{\"error\": \"Chaos Engine forced status " + statusCode + "\"}";
                 byte[] responseBytes = responseJson.getBytes(StandardCharsets.UTF_8);
@@ -217,7 +290,7 @@ public class ProxyRequestHandler implements HttpHandler {
                     entry.setDurationMs(durationMs);
                     entry.setMethod(method);
                     entry.setPath(incomingPath);
-                    entry.setTargetUrl(null);
+                    entry.setTargetUrl(targetUri);
                     entry.setStatusCode(statusCode);
                     entry.setRequestHeaders(objectMapper.writeValueAsString(exchange.getRequestHeaders()));
                     entry.setResponseHeaders("{\"Content-Type\":[\"application/json\"]}");
@@ -232,30 +305,6 @@ public class ProxyRequestHandler implements HttpHandler {
                 return;
             }
 
-            // 1. Remainder path computation
-            String normalizedLocal = PathUtil.normalize(bestMatch.getLocalPath());
-            String remainderPath = incomingPath.substring(normalizedLocal.length());
-            if (remainderPath.isEmpty()) {
-                remainderPath = "/";
-            } else if (!remainderPath.startsWith("/")) {
-                remainderPath = "/" + remainderPath;
-            }
-
-            // 2. Target URI construction
-            String targetBase = bestMatch.getTargetBaseUrl() != null ? bestMatch.getTargetBaseUrl() : "";
-            while (targetBase.length() > 1 && targetBase.endsWith("/")) {
-                targetBase = targetBase.substring(0, targetBase.length() - 1);
-            }
-            String rawQuery = exchange.getRequestURI().getRawQuery();
-            String targetUri = targetBase + remainderPath + (rawQuery != null && !rawQuery.isEmpty() ? "?" + rawQuery : "");
-
-            // 3. Read method and full request body
-            String method = exchange.getRequestMethod();
-            byte[] bodyBytes;
-            try (InputStream is = exchange.getRequestBody()) {
-                bodyBytes = is.readAllBytes();
-            }
-
             // 4. Build outgoing headers
             // The accept-encoding exclusion keeps responses uncompressed/readable for logging, Inspector, and Auto-Mock
             HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(URI.create(targetUri))
@@ -263,13 +312,20 @@ public class ProxyRequestHandler implements HttpHandler {
                             ? HttpRequest.BodyPublishers.noBody()
                             : HttpRequest.BodyPublishers.ofByteArray(bodyBytes));
 
+            boolean hasUserAgent = false;
             for (Map.Entry<String, List<String>> headerEntry : exchange.getRequestHeaders().entrySet()) {
                 String key = headerEntry.getKey();
                 if (key != null && !DISALLOWED_HEADERS.contains(key.toLowerCase())) {
+                    if (key.equalsIgnoreCase("user-agent")) {
+                        hasUserAgent = true;
+                    }
                     for (String val : headerEntry.getValue()) {
                         requestBuilder.header(key, val);
                     }
                 }
+            }
+            if (!hasUserAgent) {
+                requestBuilder.header("User-Agent", "EntropyLab-Proxy/1.0");
             }
 
             // 5. Send request via HttpClient
@@ -344,9 +400,11 @@ public class ProxyRequestHandler implements HttpHandler {
                 e.printStackTrace(System.err);
             }
         } catch (Exception e) {
+            long durationMs = System.currentTimeMillis() - startTime;
+            String errorMsg = e.getMessage() != null ? e.getMessage() : e.toString();
+            byte[] errorResponse = ("Bad Gateway: " + errorMsg).getBytes(StandardCharsets.UTF_8);
             try {
-                String errorMsg = e.getMessage() != null ? e.getMessage() : e.toString();
-                byte[] errorResponse = ("Bad Gateway: " + errorMsg).getBytes(StandardCharsets.UTF_8);
+                exchange.getResponseHeaders().set("Content-Type", "text/plain; charset=utf-8");
                 exchange.sendResponseHeaders(502, errorResponse.length);
                 try (OutputStream os = exchange.getResponseBody()) {
                     os.write(errorResponse);
@@ -354,6 +412,25 @@ public class ProxyRequestHandler implements HttpHandler {
             } catch (IOException ignored) {
             } finally {
                 exchange.close();
+            }
+
+            try {
+                RequestLogEntry entry = new RequestLogEntry();
+                entry.setTimestamp(startTime);
+                entry.setDurationMs(durationMs);
+                entry.setMethod(method != null ? method : exchange.getRequestMethod());
+                entry.setPath(incomingPath);
+                entry.setTargetUrl(targetUri);
+                entry.setStatusCode(502);
+                entry.setRequestHeaders(objectMapper.writeValueAsString(exchange.getRequestHeaders()));
+                entry.setResponseHeaders("{\"Content-Type\":[\"text/plain; charset=utf-8\"]}");
+                entry.setRequestBody(bodyBytes != null ? new String(bodyBytes, StandardCharsets.UTF_8) : "");
+                entry.setResponseBody("Bad Gateway: " + errorMsg);
+                entry.setType("FORWARDED");
+
+                logDao.insertAsync(entry, saved -> LogEventBus.getInstance().publish(saved));
+            } catch (Exception logEx) {
+                logEx.printStackTrace(System.err);
             }
         }
     }

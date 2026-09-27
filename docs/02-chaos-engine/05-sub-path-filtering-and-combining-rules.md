@@ -13,7 +13,7 @@ The **Sub-path filter** feature enables you to isolate chaos injection to a spec
 
 The **Sub-path filter (optional)** input is located directly beneath the Connection Reset controls in the **Edit Chaos Rule** dialog.
 
-![Screenshot: Edit Chaos Rule dialog for route /stripe, showing Latency and Status Override enabled with the Sub-path filter field populated with /checkout](./images/chaos-subpath-filter-dialog.png)
+![Screenshot: Edit Chaos Rule dialog for route /stripe, showing Latency and Status Override enabled with the Sub-path filter field populated with /checkout](../images/chaos-subpath-filter-dialog.png)
 
 When populated, the filter scopes **all three chaos features** (latency, status override, and connection reset) exclusively to request paths that match the specified sub-path. Requests matching the parent route but targeting different sub-paths bypass all chaos rules and forward directly to the real API.
 

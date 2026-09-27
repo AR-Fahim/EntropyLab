@@ -13,7 +13,7 @@ Modern software development often requires frontend developers to build and test
 
 Mock endpoints are configured and maintained in the **Mocks** tab:
 
-![Screenshot: Add Mock dialog showing the Local Path input set to /api/users, with the Choose File button displaying the path to users-mock.json](./images/mocks-add-mock-dialog.png)
+![Screenshot: Add Mock dialog showing the Local Path input set to /api/users, with the Choose File button displaying the path to users-mock.json](../images/mocks-add-mock-dialog.png)
 
 The interface includes:
 - **Toolbar**: Houses the **Add Mock** button.
