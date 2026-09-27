@@ -72,6 +72,7 @@ The mock is now active immediately. To prove that EntropyLab is serving your sav
   Open this file in VS Code or Notepad, modify a field (e.g., change `"name": "The Octocat"` to `"name": "Super Octocat"`), and save. Refresh your browser to see your modifications immediately.
 - **Verify in the Mocks Tab:**
   Click the **Mocks** tab. You will see your snapshot listed with **Auto-Generated: Yes**, pointing to the file in your AppData directory.
+- Use Edit Mock to manually point an existing auto-generated mock at a different saved file, or use Delete Mock to remove one you no longer need — no need to re-capture from scratch.
 
 ---
 
