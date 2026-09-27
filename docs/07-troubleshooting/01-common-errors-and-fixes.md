@@ -26,6 +26,9 @@ The table below catalogs every standard error message and unexpected condition i
 | **`Duplicate Route: A route for this path already exists`** | Warning dialog in **Routes** tab | An existing route already uses this exact **Local Path**. | Routes must have unique prefixes. Modify the existing route using **Edit Route**, or choose a distinct local path prefix. |
 | **`Duplicate Mock: A mock for this path already exists`** | Warning dialog in **Mocks** tab | An existing mock already intercepts this exact local path. | Mocks must have unique paths. Uncheck or delete the existing mock before registering a new one for that path. |
 | **`Validation Error: Both fields are required`** | Warning dialog in **Routes** tab | The **Local Path** or **Target Base URL** field was left blank or contains only whitespace. | Enter non-empty values for both fields before clicking **Add** or **Save**. |
+| **Duplicate path error when editing a mock** | Warning dialog in **Mocks** tab (`Edit Mock`) | Another mock already uses the path you're changing to. | Choose a different path, or edit/delete the conflicting mock first. |
+| **Deleted a mock but the same URL still returns mock-like data** | Browser or API client response | Another enabled mock or a cached browser response may still be matching. | Check the **Mocks** tab for any other entry on that exact path, and hard-refresh your client/browser. |
+| **Edited a mock's file but responses look unchanged** | Browser or API client response | The **Enabled** toggle may be off, or the wrong file was selected during editing. | Confirm **Enabled** is checked and re-open **Edit Mock** to verify the **File Path** shown is correct. |
 
 ---
 
