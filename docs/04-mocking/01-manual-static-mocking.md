@@ -80,6 +80,14 @@ A new row appears in your **Mocks** table with:
    - The **Type** column displays **`MOCKED`**.
    - The **Duration (ms)** column displays single-digit milliseconds (e.g., `4 ms`).
 
+### Editing a Mock
+
+You can also edit an existing mock's path or file at any time — see the full Edit Mock walkthrough in [Managing Mocks and Auto-Mock Details](./02-managing-mocks-and-auto-mock-details.md).
+
+### Deleting a Mock
+
+You can also delete an existing mock at any time — see the full Delete Mock walkthrough in [Managing Mocks and Auto-Mock Details](./02-managing-mocks-and-auto-mock-details.md).
+
 ---
 
 ## Routes vs. Mocks: Matching Behavior Comparison
@@ -120,6 +128,8 @@ The single most critical concept to understand when configuring mocks is that **
   Remember that mocks match **exact paths only**. If your mock is defined as `/api/users`, calling `/api/users/` (with a trailing slash) or `/api/users/1` will not match the mock and will fall through to route matching.
 - **"Internal Server Error: Failed to read mock file" (Status 500)**:
   If a request returns a 500 error with this message, EntropyLab could not open the file specified in the **File Path** column. Check whether you moved, renamed, or deleted the `.json` file on your filesystem.
+- **Trying to edit a mock's path to one that's already used by another mock**:
+  Same duplicate-path protection as adding a new one applies here too.
 
 ## Related Reading
 
