@@ -89,6 +89,7 @@ http://localhost:8080/api/v2/checkout
   1. Add a route in the **Routes** tab mapping `/api` to your real backend URL.
   2. In the **Mocks** tab, simply uncheck the **Enabled** box for `/api/v2/checkout`.
   3. Traffic immediately falls through to the real backend without changing a single line of code in your frontend application.
+- Once the real backend is ready, use Delete Mock to remove the mapping entirely, or use Edit Mock to repoint the same Local Path at a different file without losing your existing configuration.
 
 ---
 
