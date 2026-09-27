@@ -125,5 +125,7 @@ The high-concurrency journaling mode utilized by EntropyLab's embedded SQLite da
 
 - [Welcome to EntropyLab](../00-orientation/01-welcome.md)
 - [Core Concepts: How Reverse Proxies & Chaos Work](../00-orientation/02-core-concepts.md)
+- [Payload Mutation Reference](../02-chaos-engine/06-payload-mutation.md)
+- [Analytics Dashboard Reference](../03-inspector/03-analytics-dashboard.md)
 - [Complete UI Field Reference](./02-complete-ui-field-reference.md)
 - [Limitations & FAQ](../07-troubleshooting/02-limitations-and-faq.md)

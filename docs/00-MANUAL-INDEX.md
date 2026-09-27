@@ -43,6 +43,7 @@ Choose your path based on your experience and current objective:
 - [03. Status Code Override: Simulating HTTP Outages & Flakiness](./02-chaos-engine/03-status-code-override.md) — Faking local HTTP 500, 503, and 504 errors using an independent per-request probability model.
 - [04. Connection Reset: Simulating Hard Crashes & Dropped Sockets](./02-chaos-engine/04-connection-reset.md) — Abruptly severing raw TCP sockets with no HTTP response to test catastrophic failure handling.
 - [05. Sub-Path Filtering & Combining Chaos Rules](./02-chaos-engine/05-sub-path-filtering-and-combining-rules.md) — Scoping chaos to specific sub-paths and mastering the deterministic execution pipeline.
+- [06. Payload Mutation: Testing Malformed JSON & Corrupted Data](./02-chaos-engine/06-payload-mutation.md) — Corrupting characters in successfully forwarded responses to test parser resilience and error handling.
 
 ---
 
@@ -51,6 +52,7 @@ Choose your path based on your experience and current objective:
 
 - [01. Reading & Using Traffic History](./03-inspector/01-reading-and-using-traffic-history.md) — Live-updating traffic log columns, understanding the 4 request types, and permanent SQLite audit storage.
 - [02. Inspecting Details and Auto-Mock](./03-inspector/02-inspecting-details-and-auto-mock.md) — Deep 4-panel inspection, pretty-printed JSON formatting, and single-click Auto-Mock Snapshots.
+- [03. Analytics Dashboard: Aggregated Metrics & Fault Distribution](./03-inspector/03-analytics-dashboard.md) — Session-wide traffic health overview with error rates, duration percentiles (p50/p95), and status breakdown charts.
 
 ---
 
@@ -80,6 +82,8 @@ Choose your path based on your experience and current objective:
 - [06. How-To: Capture Real Data with Auto-Mock](./06-how-to-recipes/06-capture-real-data-with-auto-mock.md) — Capture a live API response in one click and develop completely offline without rate limits.
 - [07. How-To: Scope Chaos to One Endpoint](./06-how-to-recipes/07-scope-chaos-to-one-endpoint.md) — Isolate chaos injection to a single risky sub-path while leaving sibling endpoints fast and stable.
 - [08. Capstone: Full End-to-End Resilience Testing & Mocking Workflow](./06-how-to-recipes/08-capstone-full-resilience-test.md) — A comprehensive end-to-end resilience test uniting all EntropyLab features in a single checkout scenario.
+- [09. How-To: Test Malformed JSON Resilience](./06-how-to-recipes/09-test-malformed-json-resilience.md) — Inject character-level response payload corruption to verify client handling of syntax and decoding errors.
+- [10. How-To: Monitor Session Traffic with Analytics](./06-how-to-recipes/10-monitor-traffic-with-analytics.md) — Evaluate overall traffic health, error rates, and latency percentiles across an entire testing session.
 
 ---
 

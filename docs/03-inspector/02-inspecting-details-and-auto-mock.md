@@ -131,6 +131,7 @@ To prove that EntropyLab is now serving your saved snapshot without contacting t
 ## Related Reading
 
 - [Reading & Using Traffic History](./01-reading-and-using-traffic-history.md)
+- [Analytics Dashboard: Aggregated Metrics & Fault Distribution](./03-analytics-dashboard.md)
 - [Manual Static Mocking](../04-mocking/01-manual-static-mocking.md)
 - [Managing Mocks and Auto-Mock Details](../04-mocking/02-managing-mocks-and-auto-mock-details.md)
 - [How-To Recipe: Capture Real Data with Auto-Mock](../06-how-to-recipes/06-capture-real-data-with-auto-mock.md)

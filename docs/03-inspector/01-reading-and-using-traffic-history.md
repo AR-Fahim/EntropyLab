@@ -87,6 +87,7 @@ To keep the desktop interface fluid, memory-efficient, and responsive even under
 ## Related Reading
 
 - [Inspecting Details and Auto-Mock](./02-inspecting-details-and-auto-mock.md)
+- [Analytics Dashboard: Aggregated Metrics & Fault Distribution](./03-analytics-dashboard.md)
 - [Understanding and Managing Routes](../01-proxy-and-routes/01-understanding-and-managing-routes.md)
 - [What Is Chaos Engineering?](../02-chaos-engine/01-what-is-chaos-engineering.md)
 - [Settings & Data Storage: The SQLite Database](../05-settings-and-data/01-theme-and-data-storage.md)

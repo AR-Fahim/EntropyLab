@@ -66,4 +66,5 @@ A connection reset is fundamentally harsher than an HTTP error status code. When
 - [Latency Injection Reference](./02-latency-injection.md)
 - [Status Code Override Reference](./03-status-code-override.md)
 - [Connection Reset Reference](./04-connection-reset.md)
+- [Payload Mutation Reference](./06-payload-mutation.md)
 - [Sub-Path Filtering & Combining Rules](./05-sub-path-filtering-and-combining-rules.md)

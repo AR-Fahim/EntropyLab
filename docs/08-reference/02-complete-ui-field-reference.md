@@ -133,12 +133,12 @@ This reference provides exhaustive tabular specifications for every interactive 
 
 | Name | Type | Valid Values / Range | Default Value | One-Line Description | Reference Link |
 |---|---|---|---|---|---|
-| **Refresh** | Button | Action trigger | Active | Manually re-queries SQLite database and recalculates all metrics and chart buckets. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#analytics-overview) |
-| **Total Requests** | Read-only Display Metric (KPI Card) | Non-negative integer (e.g., `1,248`) | `"0"` | Total volume of requests logged across the entire database history. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
-| **Error Rate %** | Read-only Display Metric (KPI Card) | Percentage: `0.0%` to `100.0%` | `"0.0%"` | Ratio of failed requests (status >= 400 or chaos) to total requests; highlighted in red (`#FE0134`) if > 0. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
-| **Average Duration** | Read-only Display Metric (KPI Card) | Millisecond decimal string (e.g., `14.2 ms`) | `"0 ms"` | Arithmetic mean latency computed across all logged requests in the database. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
-| **p50 Duration** | Read-only Display Metric (KPI Card) | Integer milliseconds (e.g., `8 ms`) | `"0 ms"` | 50th percentile (median) duration; 50% of requests completed faster than this time. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
-| **p95 Duration** | Read-only Display Metric (KPI Card) | Integer milliseconds (e.g., `45 ms`) | `"0 ms"` | 95th percentile duration; 95% of requests completed faster than this time (tail latency). | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#metric-by-metric-reference) |
+| **Refresh** | Button | Action trigger | Active | Manually re-queries SQLite database and recalculates all metrics and chart buckets. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#overview) |
+| **Total Requests** | Read-only Display Metric (KPI Card) | Non-negative integer (e.g., `1,248`) | `"0"` | Total volume of requests logged across the entire database history. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#field-by-field-reference-kpi-summary-cards) |
+| **Error Rate %** | Read-only Display Metric (KPI Card) | Percentage: `0.0%` to `100.0%` | `"0.0%"` | Ratio of failed requests (status >= 400 or chaos) to total requests; highlighted in red (`#FE0134`) if > 0. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#field-by-field-reference-kpi-summary-cards) |
+| **Average Duration** | Read-only Display Metric (KPI Card) | Millisecond decimal string (e.g., `14.2 ms`) | `"0 ms"` | Arithmetic mean latency computed across all logged requests in the database. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#field-by-field-reference-kpi-summary-cards) |
+| **p50 Duration** | Read-only Display Metric (KPI Card) | Integer milliseconds (e.g., `8 ms`) | `"0 ms"` | 50th percentile (median) duration; 50% of requests completed faster than this time. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#field-by-field-reference-kpi-summary-cards) |
+| **p95 Duration** | Read-only Display Metric (KPI Card) | Integer milliseconds (e.g., `45 ms`) | `"0 ms"` | 95th percentile duration; 95% of requests completed faster than this time (tail latency). | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#field-by-field-reference-kpi-summary-cards) |
 | **Response Status & Traffic Distribution Chart** | BarChart (JavaFX) | X-axis: CategoryAxis (`2xx Success`, `4xx Client Error`, `5xx Server Error`, `CHAOS_STATUS`, `CHAOS_RESET`, `MOCKED`); Y-axis: NumberAxis (`Request Count`) | Empty series | Bar chart breaking down traffic volume by HTTP status classes and chaos failure modes. | [Analytics Dashboard](../03-inspector/03-analytics-dashboard.md#response-status--traffic-distribution-chart) |
 
 ---
@@ -148,6 +148,8 @@ This reference provides exhaustive tabular specifications for every interactive 
 - [Glossary of Terms](./01-glossary.md)
 - [Proxy Control Reference](../01-proxy-and-routes/02-proxy-control.md)
 - [Understanding & Managing Routes](../01-proxy-and-routes/01-understanding-and-managing-routes.md)
+- [Payload Mutation Reference](../02-chaos-engine/06-payload-mutation.md)
 - [Sub-Path Filtering & Combining Chaos Rules](../02-chaos-engine/05-sub-path-filtering-and-combining-rules.md)
 - [Reading & Using Traffic History](../03-inspector/01-reading-and-using-traffic-history.md)
+- [Analytics Dashboard Reference](../03-inspector/03-analytics-dashboard.md)
 - [Managing Mocks and Auto-Mock Details](../04-mocking/02-managing-mocks-and-auto-mock-details.md)
