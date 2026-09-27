@@ -4,17 +4,4 @@ target/
 *.iml
 .vscode/
 scratch/
-DOC_CONTEXT.md
-MasterContextBrief.md
 .env
-PersistentProjectContext.md
-Doc_writing_milestones.md
-implementation plan and history.md
-README_SPEC.md
-VIDEO_SPEC.md
-VIDEO_SCRIPT_MILESTONES.md
-VIDEO_SCRIPT.md
-VIDEO_FACT_SHEET.md
-SHOT_LIST.md
-DEMO_PREP.md
-target/
