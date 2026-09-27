@@ -39,12 +39,39 @@ You can activate or deactivate any mock instantly without restarting the proxy:
    - If no matching route exists, the request returns HTTP `404 Not Found` (`No route configured for this path`).
 5. Check the box again at any time to resume serving the local mock immediately.
 
-### 2. Disabling or Removing Mocks
+### 2. Editing a Mock
 
-To take a mock out of service permanently:
-1. Uncheck the **Enabled** checkbox to deactivate it immediately.
-2. If you no longer need the mock record, you can replace or overwrite it by adding a new mock or snapshot for that path.
-3. To delete the underlying file, navigate to the directory shown in the **File Path** column (for auto-generated mocks, `%APPDATA%\EntropyLab\mocks\`) and delete the file.
+You can modify an existing mock's intercepted path or source JSON file at any time without recreating it:
+
+1. Click the **Mocks** tab in the top navigation bar.
+2. Click the table row of the mock you wish to edit to select it (or double-click the row directly, or right-click and select **Edit**).
+3. Click the **Edit Mock** button in the toolbar.
+4. The **Edit Mock** dialog opens pre-filled with the mock's current **Local Path** and **File Path**.
+5. Update either or both fields:
+   - **Local Path**: Edit the URL path string (must begin with `/`).
+   - **Mock File**: Click **Choose File...** to browse your filesystem and select a new `.json` file.
+6. Click **Save** to commit the changes immediately.
+
+**Duplicate-Path Validation During Edits:**  
+EntropyLab's path validator checks for uniqueness across all configured mocks, but **explicitly excludes the mock currently being edited**. This means keeping the same Local Path while changing only the target File Path is fully valid and will not trigger a duplicate-path error.
+
+> 📝 **Note on Auto-Generated Status:** Editing the Local Path or File Path of an Auto-Generated mock preserves its origin. The **Auto-Generated** column remains **`Yes`**, tracking that the mock originally came from an Inspector traffic snapshot.
+
+### 3. Deleting a Mock
+
+To permanently remove a mock configuration from EntropyLab:
+
+1. Click the **Mocks** tab in the top navigation bar.
+2. Click the table row of the mock you wish to remove (or right-click the row and choose **Delete**).
+3. Click the red **Delete Mock** button in the toolbar.
+4. A themed confirmation dialog appears:
+   ```text
+   Confirm Deletion
+   Delete mock for '<localPath>'?
+   ```
+5. Click **Yes** to confirm. The mapping is removed from the table and configuration immediately.
+
+> 📝 **Note on Physical Files:** Deleting a mock in EntropyLab removes only the routing mapping from the application's configuration. The physical `.json` file on disk (whether located in `%APPDATA%\EntropyLab\mocks\` or a custom workspace directory) is **not** deleted. This ensures you never lose captured response data by accident. If you wish to delete the file permanently, delete it manually via Windows File Explorer.
 
 ---
 
